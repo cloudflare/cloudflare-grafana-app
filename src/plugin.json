@@ -1,0 +1,75 @@
+{
+  "type": "app",
+  "name": "Cloudflare for Grafana",
+  "id": "cloudflare-app",
+
+  "staticRoot": ".",
+
+  "routes": [
+    {
+      "path": "api/v4/*",
+      "method": "GET",
+      "url": "https://api.cloudflare.com/client/v4",
+      "headers": [
+        {"name": "X-Auth-Key", "content": "{{.SecureJsonData.token}}"},
+        {"name": "X-Auth-Email", "content": "{{.JsonData.email}}"}
+      ]
+    },
+    {
+      "path": "zones/*",
+      "method": "GET",
+      "url": "https://api.cloudflare.com/client/v4/zones",
+      "headers": [
+        {"name": "X-Auth-Key", "content": "{{.SecureJsonData.token}}"},
+        {"name": "X-Auth-Email", "content": "{{.JsonData.email}}"}
+      ]
+    }
+  ],
+
+  "info": {
+    "description": "Cloudflare for Grafana allows for the collection and graphing of Cloudflare analytics data over time.",
+    "author": {
+      "name": "Cloudflare",
+      "url": "https://www.cloudflare.com"
+    },
+    "keywords": ["cloudflare", "dns", "http", "security", "cdn"],
+    "logos": {
+      "small": "img/cf_icon.png",
+      "large": "img/cf_logo.png"
+    },
+    "links": [
+      {"name": "Project site", "url": "https://github.com/cloudflare/cloudflare-grafana-app"},
+      {"name": "License & Terms", "url": "https://github.com/cloudflare/cloudflare-grafana-app/blob/master/LICENSE"}
+    ],
+    "screenshots": [
+      {"name": "Dashboard: Zones", "path": "img/cf_dashboard_zones.png"},
+      {"name": "Dashboard: Virtual DNS", "path": "img/cf_dashboard_zones.png"}
+    ],
+    "version": "0.0.1",
+    "updated": "2017-01-20"
+  },
+
+  "includes": [
+    {
+      "type": "dashboard",
+      "name": "Zones",
+      "path": "dashboards/zones.json",
+      "addToNav": true
+    },
+    {
+      "type": "dashboard",
+      "name": "Virtual DNS",
+      "path": "dashboards/virtual-dns.json",
+      "addToNav": true,
+      "defaultNav": true
+    },
+    {
+      "type": "datasource",
+      "name": "cloudflare-api"
+    }
+  ],
+
+  "dependencies": {
+    "grafanaVersion": "3.x.x"
+  }
+}
