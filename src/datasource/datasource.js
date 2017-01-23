@@ -51,7 +51,7 @@ class CloudflareDatasource {
     };
     return this.api.invokeQuery(query).then(
       this.processResponse.bind(this, query, options)
-    );
+      );
   }
 
   processResponse(query, options, resp) {
@@ -87,7 +87,11 @@ class CloudflareDatasource {
         let unit = unitList[seriesName];
         /* Add dimension value if present */
         if (group.dimensions) {
-          seriesName += ", " + group.dimensions.join(",")
+          let dimensions = group.dimensions.join(",")
+          if (dimensions == "") {
+            return;
+          }
+          seriesName += ", " + dimensions;
         }
         let grafana_series = {
           target: seriesName,

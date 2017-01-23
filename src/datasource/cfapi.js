@@ -32,8 +32,8 @@ function getMaxRefreshInterval(query) {
 
 class CloudflareProxy {
   constructor(backendSrv) {
-  	this.backendSrv = backendSrv;
-  	this.baseUrl = 'api/plugin-proxy/cloudflare-app';
+    this.backendSrv = backendSrv;
+    this.baseUrl = 'api/plugin-proxy/cloudflare-app';
     this.cache = {};
     this.cacheUpdateInterval = 5 * 60 * 1000; // 5 min by default
     this.requestCachingIntervals = {
@@ -81,22 +81,22 @@ class CloudflareProxy {
         timestamp - cache_until > max_refresh_interval ||
         since < cache_since ||
         Math.abs(query_range - cached_query_range) > 60 * 1000 // is time range changed?
-      ))
-    );
+        ))
+      );
   }
 
   getZones() {
     return this._get('/api/v4/zones').then(response => {
       let data = response.data;
       if (!data || !data.success) {
-      	return []
+        return []
       }
       /* Gather list of active zones */
       let zones = [];
       data.result.forEach(e => {
-      	if (e.status == "active") {
-      		zones.push({text: e.name, value: e.id});	
-      	}
+        if (e.status == "active") {
+          zones.push({text: e.name, value: e.id});
+        }
       });
       return zones;
     });
@@ -152,5 +152,5 @@ class CloudflareProxy {
 }
 
 angular
-  .module('grafana.services')
-  .service('proxySrv', CloudflareProxy);
+.module('grafana.services')
+.service('proxySrv', CloudflareProxy);
