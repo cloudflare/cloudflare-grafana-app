@@ -131,7 +131,24 @@ class CloudflareProxy {
   }
 
   formatFilters(filters) {
-    return '';
+    let out = [];
+    filters.forEach((e, i) => {
+      let op = e.operator;
+      /* Convert equality operator */
+      if (op == '=') {
+        op = '==';
+      }
+      let key = dimensionList.find(function (k) { return k.text == e.key; })
+      if (key) {
+        out.push(key.value + op + e.value);
+      }
+      /* Add condition if chaining */
+      let cond = e.condition || 'AND';
+      if (i < filters.length - 1) {
+        out.push(cond);
+      }
+    });
+    return out.join(' ');
   }
 
   invokeAPI(query) {
