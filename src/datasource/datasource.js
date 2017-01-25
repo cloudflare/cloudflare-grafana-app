@@ -1,4 +1,4 @@
-import {metricList, dimensionList, unitList} from './metric_def';
+import {metricList, dimensionList, unitList, dimensionValues} from './metric_def';
 import _ from 'lodash';
 import TableModel from 'app/core/table_model';
 import './cfapi';
@@ -130,11 +130,16 @@ class CloudflareDatasource {
   }
 
   getTagKeys() {
-    return Promise.resolve(dimensionList);
+    return Promise.resolve(dimensionList.map(e => {
+      return {text: e.value};
+    }));
   }
 
   getTagValues(options) {
-    return Promise.resolve([]);
+    let keys = dimensionValues[options.key] || [];
+    return Promise.resolve(keys.map(e => {
+      return {text: e};
+    }));
   }
 }
 

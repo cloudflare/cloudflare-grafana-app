@@ -10,7 +10,7 @@
     "from": "now-1h",
     "to": "now"
   },
-  "hideControls": true,
+  "hideControls": false,
   "sharedCrosshair": true,
   "rows": [
     {
