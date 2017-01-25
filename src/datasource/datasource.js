@@ -49,21 +49,26 @@ class CloudflareDatasource {
       dimensions: target.dimensions,
       filters: filters
     };
-    return this.api.invokeQuery(query).then(
-      this.processResponse.bind(this, query, options)
-      );
+
+    /* Resolve tag, and fetch data */
+    return this.api.fetchTag(query).then(tag => {
+      return this.api.fetchData(query).then(response => {
+        return this.processResponse(query, options, response);
+      });
+    });
   }
 
   processResponse(query, options, resp) {
     /* Check whether the API response is OK and well formed. */
-    if (!resp.data) {
+    let data = resp['data'];
+    if (!data) {
       return Promise.reject({message: 'No data in the API response.'});
     }
-    if (resp.data.errors.length > 0) {
-      return Promise.reject({message: resp.data.errors.join(' ')});
+    if (data.errors.length > 0) {
+      return Promise.reject({message: data.errors.join(' ')});
     }
 
-    var result = resp.data.result;
+    var result = data.result;
     if (result.rows === 0) {
       return [];
     }
@@ -123,10 +128,9 @@ class CloudflareDatasource {
       return Promise.resolve(dimensionList);
     }
     if (query === 'clusters()') {
-      return this.api.getClusters();
+      return this.api.fetchClusters();
     }
-
-    return this.api.getZones();
+    return this.api.fetchZones();
   }
 
   getTagKeys() {
