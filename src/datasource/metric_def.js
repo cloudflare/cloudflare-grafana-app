@@ -1,5 +1,7 @@
 var metricList = [
   {text: 'Query count', value: 'queryCount' },
+  {text: 'Stale count', value: 'staleCount' },
+  {text: 'Uncached count', value: 'uncachedCount' },
   {text: 'Average response time', value: 'responseTimeAvg' },
   {text: 'Median response time', value: 'responseTimeMedian' },
   {text: '90th percentile response time', value: 'responseTime90th' },
@@ -15,12 +17,15 @@ var dimensionList = [
   {text: 'Origin NS',       value: 'origin'}
 ];
 
+/* Convert from interval value to per-second */
+function toPps(p, from, to) {
+  return p / ((to - from) / 1000 + 1);
+}
+
 var unitList = {
-  queryCount: {
-    transform: function (p, from, to) {
-      return p / ((to - from) / 1000 + 1); /* Convert to seconds */
-    }
-  }
+  queryCount: { transform: toPps },
+  staleCount: { transform: toPps },
+  uncachedCount: { transform: toPps }
 }
 
 var dimensionValues = {

@@ -11,13 +11,13 @@
     "to": "now"
   },
   "hideControls": false,
-  "sharedCrosshair": true,
   "rows": [
     {
       "collapse": false,
       "editable": true,
       "title": "$cluster",
       "showTitle": true,
+      "repeat": "cluster",
       "panels": [
         {
           "aliasColors": {},
@@ -51,16 +51,98 @@
           "lines": true,
           "linewidth": 1,
           "links": [],
-          "minSpan": 3,
+          "minSpan": 6,
           "nullPointMode": "connected",
           "percentage": false,
           "pointradius": 5,
           "points": false,
           "renderer": "flot",
-          "repeat": "cluster",
           "seriesOverrides": [],
-          "span": 3,
+          "span": 12,
           "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "refId": "A",
+              "tag": "$cluster",
+              "from": "vdns",
+              "metrics": ["queryCount", "uncachedCount", "staleCount"],
+              "dimensions": ""
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "$cluster queries, uncached, stale",
+          "tooltip": {
+            "msResolution": false,
+            "shared": true,
+            "value_type": "individual"
+          },
+          "transparent": false,
+          "type": "graph",
+          "xaxis": {
+            "show": false
+          },
+          "yaxes": [
+            {
+              "format": "pps",
+              "label": "Query rate",
+              "logBase": 1,
+              "max": null,
+              "min": 0,
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ]
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "datasource": "cloudflare",
+          "editable": true,
+          "error": false,
+          "fill": 1,
+          "grid": {
+            "threshold1": null,
+            "threshold1Color": "rgba(216, 200, 27, 0.27)",
+            "threshold2": null,
+            "threshold2Color": "rgba(234, 112, 112, 0.22)"
+          },
+          "height": "250px",
+          "id": 2,
+          "isNew": true,
+          "legend": {
+            "alignAsTable": true,
+            "avg": true,
+            "current": true,
+            "hideEmpty": true,
+            "hideZero": true,
+            "max": true,
+            "min": true,
+            "rightSide": false,
+            "show": true,
+            "total": false,
+            "values": true
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [],
+          "minSpan": 6,
+          "nullPointMode": "connected",
+          "percentage": false,
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "span": 6,
+          "stack": true,
           "steppedLine": false,
           "targets": [
             {
@@ -87,7 +169,7 @@
           "yaxes": [
             {
               "format": "pps",
-              "label": "",
+              "label": "Query rate",
               "logBase": 1,
               "max": null,
               "min": 0,
@@ -117,7 +199,7 @@
             "threshold2Color": "rgba(234, 112, 112, 0.22)"
           },
           "height": "250px",
-          "id": 2,
+          "id": 3,
           "isNew": true,
           "legend": {
             "alignAsTable": true,
@@ -135,97 +217,12 @@
           "lines": true,
           "linewidth": 1,
           "links": [],
-          "minSpan": 3,
+          "minSpan": 6,
           "nullPointMode": "connected",
           "percentage": false,
           "pointradius": 5,
           "points": false,
           "renderer": "flot",
-          "repeat": "cluster",
-          "seriesOverrides": [],
-          "span": 6,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "refId": "A",
-              "tag": "$cluster",
-              "from": "vdns",
-              "metrics": ["responseTimeMedian", "responseTime90th", "responseTime99th"],
-              "dimensions": "origin"
-            }
-          ],
-          "timeFrom": null,
-          "timeShift": null,
-          "title": "$cluster response time latency by origin",
-          "tooltip": {
-            "msResolution": false,
-            "shared": true,
-            "value_type": "individual"
-          },
-          "transparent": false,
-          "type": "graph",
-          "xaxis": {
-            "show": false
-          },
-          "yaxes": [
-            {
-              "format": "ms",
-              "label": "Latency (ms)",
-              "logBase": 1,
-              "max": null,
-              "min": 0,
-              "show": true
-            },
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            }
-          ]
-        },
-        {
-          "aliasColors": {},
-          "bars": false,
-          "datasource": "cloudflare",
-          "editable": true,
-          "error": false,
-          "fill": 1,
-          "grid": {
-            "threshold1": null,
-            "threshold1Color": "rgba(216, 200, 27, 0.27)",
-            "threshold2": null,
-            "threshold2Color": "rgba(234, 112, 112, 0.22)"
-          },
-          "height": "250px",
-          "id": 2,
-          "isNew": true,
-          "legend": {
-            "alignAsTable": true,
-            "avg": true,
-            "current": true,
-            "hideEmpty": true,
-            "hideZero": true,
-            "max": true,
-            "min": true,
-            "rightSide": false,
-            "show": true,
-            "total": false,
-            "values": true
-          },
-          "lines": true,
-          "linewidth": 1,
-          "links": [],
-          "minSpan": 3,
-          "nullPointMode": "connected",
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "repeat": "cluster",
           "seriesOverrides": [],
           "span": 6,
           "stack": true,
@@ -235,13 +232,13 @@
               "refId": "A",
               "tag": "$cluster",
               "from": "vdns",
-              "metrics": ["responseCached"],
+              "metrics": ["responseTimeMedian","responseTime90th","responseTime99th"],
               "dimensions": ""
             }
           ],
           "timeFrom": null,
           "timeShift": null,
-          "title": "$cluster cache hit ratio",
+          "title": "$cluster latency percentiles",
           "tooltip": {
             "msResolution": false,
             "shared": true,
@@ -308,7 +305,7 @@
         "hide": 0,
         "includeAll": false,
         "label": "Cluster",
-        "multi": false,
+        "multi": true,
         "name": "cluster",
         "query": "clusters()",
         "refresh": 1,

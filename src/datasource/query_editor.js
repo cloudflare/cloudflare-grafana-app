@@ -8,7 +8,7 @@ class CloudflareQueryCtrl extends QueryCtrl {
 
     this.dimensions = dimensionList;
     this.metrics = metricList;
-    this.target.from = this.target.mode || 'zone';
+    this.target.from = this.target.from || 'zone';
     this.queryModes = [
       {value: 'zone', text: 'Zone'},
       {value: 'vdns', text: 'Virtual DNS'}

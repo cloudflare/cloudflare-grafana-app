@@ -36,6 +36,9 @@ class CloudflareDatasource {
     /* Build out ad-hoc filters and do templating. */
     let filters = this.templateSrv.getAdhocFilters(this.name);
     let tag = this.templateSrv.replace(target.tag, options.scopedVars, this.joinField.bind(this));
+    if (!tag) {
+      return Promise.resolve({data: []});
+    }
 
     /* Run the query and process response */
     let query = {

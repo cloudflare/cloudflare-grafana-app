@@ -42,6 +42,21 @@ class CloudflareProxy {
     };
   }
 
+  fetchConfig() {
+    if (this.config) {
+      return Promise.resolve(this.config);
+    }
+    var self = this;
+    /* Resolve organizations for this datasource */
+    return this.backendSrv.get('api/plugins/cloudflare-app/settings').then(resp => {
+      this.config = resp.jsonData;
+      return this.config;
+    }, () => {
+      this.config = {};
+      return this.config;
+    });
+  }
+
   fetchData(query) {
     let cached_query = _.cloneDeep(query);
     let hash = getHash(cached_query);
@@ -84,13 +99,17 @@ class CloudflareProxy {
   }
 
   fetchTag(query) {
+    /* Break tag and scope */
+    let scope = query.tag.split(':', 2);
+    let tag = scope[0];
+    scope = scope[1];
     /* Resolve tag if symbolic */
     let tagRegex = /[a-z0-9]{32}/g;
-    if (query.tag.match(tagRegex)) {
+    if (tag.match(tagRegex)) {
       return Promise.resolve(query.tag);
     }
     /* Check tag cache */
-    let key = '#'+query.from+':'+query.tag;
+    let key = '#' + query.from + ':' + query.tag;
     let cached = this.tags[key];
     if (cached) {
       query.tag = cached;
@@ -99,19 +118,26 @@ class CloudflareProxy {
     let path = 'zones';
     if (query.from == 'vdns') {
       path = 'user/virtual_dns';
+      if (scope) {
+        path = 'organizations/' + scope + '/virtual_dns'
+      }
     }
     /* Resolve the tag name to ID */
-    return this._get('/api/v4/'+path, {name: query.tag}).then(response => {
-      let data = response.data;
+    return this._get('/api/v4/'+path, {name: tag}).then(resp => {
+      let data = resp.data;
       if (!data || !data.success) {
         return '';
       }
       data.result.forEach(e => {
-        if (e.name == query.tag) {
-          this.tags[key] = e.id;
+        if (e.name == tag) {
+          let id = e.id;
+          if (scope) {
+            id = id + ':' + scope;
+          }
+          this.tags[key] = id;
           /* Replace query tag and return */
-          query.tag = e.id;
-          return e.id;
+          query.tag = id;
+          return id;
         }
       });
     });
@@ -125,33 +151,35 @@ class CloudflareProxy {
       per_page: 50
     }
     /* Get list of zones */
-    return this._get('/api/v4/zones', params).then(response => {
-      let data = response['data'];
+    return this._get('/api/v4/zones', params).then(resp => {
+      let data = resp['data'];
       if (!data || !data.success) {
         return [];
       }
       /* Gather list of active zones */
       let zones = [];
       data.result.forEach(e => {
-        if (e.status == 'active') {
-          zones.push({text: e.name, value: e.id});
-        }
+        zones.push({text: e.name, value: e.id});
       });
       return zones;
     });
   }
 
   fetchClusters() {
-    return this._get('/api/v4/user/virtual_dns').then(response => {
-      let data = response['data'];
-      if (!data || !data.success) {
-        return []
+    return this.fetchConfig().then(() => {
+      if (!this.config.clusters) {
+        return [];
       }
-      let clusters = [];
-      data.result.forEach(e => {
-        clusters.push({text: e.name, value: e.id});  
+      return this.config.clusters.map(e => {
+        /* Glue organisation id to cluster id
+         * so that metric fetching knows whether to call
+         * organizations or user endpoint */
+        let id = e.id;
+        if (e.organization) {
+          id = id + ':' + e.organization;
+        }
+        return {text: e.name, value: id};
       });
-      return clusters;
     });
   }
 
@@ -188,14 +216,30 @@ class CloudflareProxy {
   }
 
   api(query) {
+    let endpoint = '/dns_analytics/report/bytime';
     let params = this.formatQuery(query);
-    if (query.from == 'vdns') {
-      return this._get('/user/virtual-dns/'+query.tag+'/dns-analytics/report/bytime', params);
+    let scope = query.tag.split(':', 2);
+    let tag = scope[0];
+    scope = scope[1];
+    /* Add organization endpoint prefix */
+    if (scope) {
+      scope = '/api/v4/organizations/' + scope;
     }
-    return this._get('/zones/'+query.tag+'/dns-analytics/report/bytime', params);
+    /* Select either zone or cluster */
+    if (query.from == 'vdns') {
+      if (!scope) {
+        scope = '/api/v4/user';
+      }
+      return this._get(scope + '/virtual_dns/' + tag + endpoint, params);
+    }
+    if (!scope) {
+      scope = '/api/v4/zones';
+    }
+    return this._get(scope + '/' + tag + endpoint, params);
   }
 
   _get(url, data) {
+    console.log()
     return this.backendSrv.datasourceRequest({
       method: 'GET',
       url: this.baseUrl + url,

@@ -4,6 +4,7 @@ import _ from 'lodash' ;
 
 class CloudflareConfigCtrl {
   constructor($scope, $injector, backendSrv) {
+    this.baseUrl = 'api/plugin-proxy/cloudflare-app/api/v4';
     this.backendSrv = backendSrv;
 
     this.appEditCtrl.setPreUpdateHook(this.preUpdate.bind(this));
@@ -40,11 +41,31 @@ class CloudflareConfigCtrl {
     });
   }
 
-  // make sure that we can hit the Cloudflare API.
+  /* Make sure that we can hit the Cloudflare API. */
   validateApiConnection() {
-    var promise = this.backendSrv.get('api/plugin-proxy/cloudflare-app/api/v4/user');
+    var promise = this.backendSrv.get(this.baseUrl + '/user');
     promise.then((resp) => {
       this.apiValidated = true;
+      /* Update organizations list */
+      let promises = [];
+      let organizations = [];
+      this.appModel.jsonData.clusters = [];
+      resp.result.organizations.forEach(e => {
+        if (e.name != "SELF") {
+          organizations.push({name: e.name, id: e.id, status: e.status});
+          /* Update list of clusters */
+          promises.push(this.backendSrv.get(
+            this.baseUrl + '/organizations/' + e.id + '/virtual_dns').then(resp => {
+              resp.result.forEach(c => {
+                c.organization = e.id;
+                this.appModel.jsonData.clusters.push(c);  
+              });
+          }));
+        }
+      });
+
+      this.appModel.jsonData.organizations = organizations;
+      return Promise.all(promises);
     }, () => {
       this.apiValidated = false;
       this.apiError = true;
@@ -53,6 +74,8 @@ class CloudflareConfigCtrl {
   }
 
   reset() {
+    this.appModel.jsonData.clusters = [];
+    this.appModel.jsonData.organizations = [];
     this.appModel.jsonData.email = '';
     this.appModel.jsonData.tokenSet = false;
     this.appModel.secureJsonData = {};
@@ -60,8 +83,8 @@ class CloudflareConfigCtrl {
   }
 
   initDatasource() {
+    /* Check for existing datasource, or create a new one */
     var self = this;
-    //check for existing datasource.
     return self.backendSrv.get('api/datasources').then(function(results) {
       var foundDs = false;
       _.forEach(results, function(ds) {
@@ -70,14 +93,14 @@ class CloudflareConfigCtrl {
           foundDs = true;
         }
       });
+      /* Create a new datasource */
       var promises = [];
       if (!foundDs) {
-        // create datasource.
         var ds = {
           name: 'cloudflare',
           type: 'cloudflare-api',
           access: 'direct',
-          jsonData: {}
+          jsonData: {},
         };
         promises.push(self.backendSrv.post('api/datasources', ds));
       }
