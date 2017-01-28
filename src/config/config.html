@@ -37,17 +37,6 @@
 			</label>
 		</div>
 	</div>
-	<div class="gf-form-inline">
-		<div class="gf-form">
-			<label class="gf-form-label width-10">Clusters</label>
-		</div>
-
-		<div class="gf-form" ng-repeat="m in ctrl.appModel.jsonData.clusters track by $index" class="gf-form">
-			<label class="gf-form-label">
-				{{m.name}}
-			</label>
-		</div>
-	</div>
 </div>
 
 <div ng-if="ctrl.appModel.jsonData.tokenSet" class="cf-enabled-box">

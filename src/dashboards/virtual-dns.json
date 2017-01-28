@@ -134,14 +134,14 @@
           "lines": true,
           "linewidth": 1,
           "links": [],
-          "minSpan": 6,
+          "minSpan": 3,
           "nullPointMode": "connected",
           "percentage": false,
           "pointradius": 5,
           "points": false,
           "renderer": "flot",
           "seriesOverrides": [],
-          "span": 6,
+          "span": 4,
           "stack": true,
           "steppedLine": false,
           "targets": [
@@ -199,7 +199,7 @@
             "threshold2Color": "rgba(234, 112, 112, 0.22)"
           },
           "height": "250px",
-          "id": 3,
+          "id": 4,
           "isNew": true,
           "legend": {
             "alignAsTable": true,
@@ -217,14 +217,14 @@
           "lines": true,
           "linewidth": 1,
           "links": [],
-          "minSpan": 6,
+          "minSpan": 3,
           "nullPointMode": "connected",
           "percentage": false,
           "pointradius": 5,
           "points": false,
           "renderer": "flot",
           "seriesOverrides": [],
-          "span": 6,
+          "span": 4,
           "stack": true,
           "steppedLine": false,
           "targets": [
@@ -253,6 +253,96 @@
             {
               "format": "ms",
               "label": "Latency (ms)",
+              "logBase": 1,
+              "max": null,
+              "min": 0,
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ]
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "datasource": "cloudflare",
+          "editable": true,
+          "error": false,
+          "fill": 0,
+          "grid": {
+            "threshold1": null,
+            "threshold1Color": "rgba(216, 200, 27, 0.27)",
+            "threshold2": null,
+            "threshold2Color": "rgba(234, 112, 112, 0.22)"
+          },
+          "height": "250px",
+          "id": 3,
+          "isNew": true,
+          "legend": {
+            "alignAsTable": true,
+            "avg": true,
+            "current": true,
+            "hideEmpty": true,
+            "hideZero": true,
+            "max": true,
+            "min": true,
+            "rightSide": false,
+            "show": true,
+            "total": false,
+            "values": true
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [],
+          "minSpan": 3,
+          "nullPointMode": "connected",
+          "percentage": false,
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "span": 4,
+          "stack": true,
+          "steppedLine": false,
+          "targets": [
+            {
+              "refId": "A",
+              "tag": "$cluster",
+              "from": "vdns",
+              "filters": [
+                {
+                  "key": "responseCached",
+                  "operator": "=",
+                  "value": "uncached"
+                }
+              ],
+              "metrics": ["queryCount"],
+              "dimensions": "origin"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "$cluster queries towards origins",
+          "tooltip": {
+            "msResolution": false,
+            "shared": true,
+            "value_type": "individual"
+          },
+          "transparent": false,
+          "type": "graph",
+          "xaxis": {
+            "show": false
+          },
+          "yaxes": [
+            {
+              "format": "pps",
+              "label": "Query rate",
               "logBase": 1,
               "max": null,
               "min": 0,

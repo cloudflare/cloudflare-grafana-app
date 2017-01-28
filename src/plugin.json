@@ -14,15 +14,6 @@
         {"name": "X-Auth-Key", "content": "{{.SecureJsonData.token}}"},
         {"name": "X-Auth-Email", "content": "{{.JsonData.email}}"}
       ]
-    },
-    {
-      "path": "zones/*",
-      "method": "GET",
-      "url": "https://api.cloudflare.com/client/v4/zones",
-      "headers": [
-        {"name": "X-Auth-Key", "content": "{{.SecureJsonData.token}}"},
-        {"name": "X-Auth-Email", "content": "{{.JsonData.email}}"}
-      ]
     }
   ],
 

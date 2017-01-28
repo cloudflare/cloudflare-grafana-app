@@ -40,6 +40,9 @@ class CloudflareDatasource {
       return Promise.resolve({data: []});
     }
 
+    /* Combine filters */
+    filters = _.union(filters, target.filters);
+
     /* Run the query and process response */
     let query = {
       range: {
@@ -132,6 +135,9 @@ class CloudflareDatasource {
     }
     if (query === 'clusters()') {
       return this.api.fetchClusters();
+    }
+    if (query === 'organizations()') {
+      return this.api.fetchOrganizations();
     }
     return this.api.fetchZones();
   }

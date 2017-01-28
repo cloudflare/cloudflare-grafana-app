@@ -100,7 +100,7 @@ class CloudflareProxy {
 
   fetchTag(query) {
     /* Break tag and scope */
-    let scope = query.tag.split(':', 2);
+    let scope = query.tag.split('/', 2);
     let tag = scope[0];
     scope = scope[1];
     /* Resolve tag if symbolic */
@@ -132,7 +132,7 @@ class CloudflareProxy {
         if (e.name == tag) {
           let id = e.id;
           if (scope) {
-            id = id + ':' + scope;
+            id = id + '/' + scope;
           }
           this.tags[key] = id;
           /* Replace query tag and return */
@@ -143,6 +143,14 @@ class CloudflareProxy {
     });
   }
 
+  fetchOrganizations() {
+    return this.fetchConfig().then(() => {
+      if (!this.config.organizations) {
+        return [];
+      }
+      return this.config.organizations;
+    });
+  }
 
   fetchZones() {
     /* Default parameters */
@@ -176,7 +184,7 @@ class CloudflareProxy {
          * organizations or user endpoint */
         let id = e.id;
         if (e.organization) {
-          id = id + ':' + e.organization;
+          id = id + '/' + e.organization;
         }
         return {text: e.name, value: id};
       });
@@ -218,7 +226,7 @@ class CloudflareProxy {
   api(query) {
     let endpoint = '/dns_analytics/report/bytime';
     let params = this.formatQuery(query);
-    let scope = query.tag.split(':', 2);
+    let scope = query.tag.split('/', 2);
     let tag = scope[0];
     scope = scope[1];
     /* Add organization endpoint prefix */
