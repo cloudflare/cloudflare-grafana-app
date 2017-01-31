@@ -90,6 +90,9 @@ class CloudflareDatasource {
   processTimeSeries(result) {
     let seriesList = [];
     let data = result.data;
+    let intervals = result.time_intervals.map(ts => {
+      return ts.map(Date.parse);
+    });
     data.forEach(group => {
       group.metrics.forEach((series, m) => {
         /* Generate time series for each metric */
@@ -104,10 +107,13 @@ class CloudflareDatasource {
           }
           seriesName += ", " + dimensions;
         }
+        /* Truncate series to time interval length and vice versa */
+        series.length = Math.min(series.length, intervals.length);
+        /* Format the time series */
         let grafana_series = {
           target: seriesName,
           datapoints: series.map((point, i) => {
-            let ts = result.time_intervals[i].map(Date.parse)
+            let ts = intervals[i];
             if (unit) {
               point = unit.transform(point, ts[0], ts[1]);
             }
