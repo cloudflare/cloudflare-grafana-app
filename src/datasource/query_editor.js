@@ -7,7 +7,8 @@ class CloudflareQueryCtrl extends QueryCtrl {
     super($scope, $injector);
     this.$q = $q;
     this.uiSegmentSrv = uiSegmentSrv;
-    this.dimensions = dimensionList;
+    this.dimensions = dimensionList.slice();
+    this.dimensions.push({text: '', value: ''});
     this.metrics = metricList;
     this.queryModes = [
       {value: 'zone', text: 'Zone'},

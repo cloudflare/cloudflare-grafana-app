@@ -224,7 +224,10 @@ class CloudflareProxy {
   }
 
   api(query) {
-    let endpoint = '/dns_analytics/report/bytime';
+    let endpoint = '/dns_analytics/report';
+    if (query.bytime) {
+      endpoint = endpoint + '/bytime';
+    }
     let params = this.formatQuery(query);
     let scope = query.tag.split('/', 2);
     let tag = scope[0];

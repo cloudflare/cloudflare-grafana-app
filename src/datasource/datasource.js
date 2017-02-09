@@ -5,10 +5,11 @@ import './cfapi';
 
 class CloudflareDatasource {
 
-  constructor(instanceSettings, templateSrv, proxySrv)  {
+  constructor(instanceSettings, templateSrv, dashboardSrv, proxySrv)  {
     this.instanceSettings = instanceSettings;
     this.name = instanceSettings.name;
     this.templateSrv = templateSrv;
+    this.dashboardSrv = dashboardSrv;
     this.api = proxySrv;
   }
 
@@ -53,8 +54,14 @@ class CloudflareDatasource {
       from: target.from || 'zone',
       metrics: target.metrics,
       dimensions: target.dimensions,
-      filters: filters
+      filters: filters,
+      bytime: true
     };
+
+    let panel = this.dashboardSrv.dash.getPanelInfoById(options.panelId);
+    if (panel) {
+      query.bytime = (panel.panel.type != 'table');
+    }
 
     /* Resolve tag, and fetch data */
     return this.api.fetchTag(query).then(tag => {
@@ -64,7 +71,7 @@ class CloudflareDatasource {
     });
   }
 
-  processResponse(query, options, resp) {
+  processResponse(query, options, resp, bytime) {
     /* Check whether the API response is OK and well formed. */
     let data = resp['data'];
     if (!data) {
@@ -128,7 +135,25 @@ class CloudflareDatasource {
   }
 
   processTableData(result) {
-    var table = new TableModel();
+    let table = new TableModel();
+    /* Create table columns */
+    result.query.dimensions.forEach(e => {
+      table.columns.push({text: e});
+    });
+    result.query.metrics.forEach(e => {
+      table.columns.push({text: e});
+    });
+    /* Add rows */
+    result.data.forEach(group => {
+      let row = [];
+      group.dimensions.forEach(e => {
+        row.push(e)
+      });
+      group.metrics.forEach(e => {
+        row.push(e)
+      });
+      table.rows.push(row);
+    });
     return {data: [table]};
   }
 
