@@ -14,10 +14,7 @@
   "rows": [
     {
       "collapse": false,
-      "editable": true,
-      "title": "$zone",
-      "showTitle": true,
-      "repeat": "zone",
+      "height": 251,
       "panels": [
         {
           "aliasColors": {},
@@ -26,15 +23,9 @@
           "editable": true,
           "error": false,
           "fill": 1,
-          "grid": {
-            "threshold1": null,
-            "threshold1Color": "rgba(216, 200, 27, 0.27)",
-            "threshold2": null,
-            "threshold2Color": "rgba(234, 112, 112, 0.22)"
-          },
+          "grid": {},
           "height": "250px",
           "id": 1,
-          "isNew": true,
           "legend": {
             "alignAsTable": true,
             "avg": true,
@@ -57,112 +48,44 @@
           "pointradius": 5,
           "points": false,
           "renderer": "flot",
+          "scopedVars": {
+            "zone": {
+              "selected": true,
+              "text": "jeromecommits.com",
+              "value": "52430cb2513a71a1532efcc836a7dd03"
+            }
+          },
           "seriesOverrides": [],
           "span": 12,
           "stack": false,
           "steppedLine": false,
           "targets": [
             {
+              "dimensions": "responseCode",
+              "metrics": [
+                "queryCount"
+              ],
               "refId": "A",
-              "tag": "$zone",
-              "metrics": ["queryCount"],
-              "dimensions": "responseCode"
+              "tag": "$zone"
             }
           ],
+          "thresholds": [],
           "timeFrom": null,
           "timeShift": null,
           "title": "$zone by response code",
           "tooltip": {
             "msResolution": false,
             "shared": true,
+            "sort": 0,
             "value_type": "individual"
           },
           "transparent": false,
           "type": "graph",
           "xaxis": {
-            "show": false
-          },
-          "yaxes": [
-            {
-              "format": "pps",
-              "label": "Query rate",
-              "logBase": 1,
-              "max": null,
-              "min": 0,
-              "show": true
-            },
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            }
-          ]
-        },
-        {
-          "aliasColors": {},
-          "bars": false,
-          "datasource": "cloudflare",
-          "editable": true,
-          "error": false,
-          "fill": 1,
-          "grid": {
-            "threshold1": null,
-            "threshold1Color": "rgba(216, 200, 27, 0.27)",
-            "threshold2": null,
-            "threshold2Color": "rgba(234, 112, 112, 0.22)"
-          },
-          "height": "250px",
-          "id": 2,
-          "isNew": true,
-          "legend": {
-            "alignAsTable": true,
-            "avg": true,
-            "current": true,
-            "hideEmpty": true,
-            "hideZero": true,
-            "max": true,
-            "min": true,
-            "rightSide": false,
-            "show": true,
-            "total": false,
-            "values": true
-          },
-          "lines": true,
-          "linewidth": 1,
-          "links": [],
-          "minSpan": 6,
-          "nullPointMode": "connected",
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "span": 6,
-          "stack": true,
-          "steppedLine": false,
-          "targets": [
-            {
-              "refId": "A",
-              "tag": "$zone",
-              "metrics": ["queryCount"],
-              "dimensions": "queryType"
-            }
-          ],
-          "timeFrom": null,
-          "timeShift": null,
-          "title": "$zone by query type",
-          "tooltip": {
-            "msResolution": false,
-            "shared": true,
-            "value_type": "individual"
-          },
-          "transparent": false,
-          "type": "graph",
-          "xaxis": {
-            "show": false
+            "mode": "time",
+            "name": null,
+            "show": false,
+            "values": []
           },
           "yaxes": [
             {
@@ -190,15 +113,9 @@
           "editable": true,
           "error": false,
           "fill": 1,
-          "grid": {
-            "threshold1": null,
-            "threshold1Color": "rgba(216, 200, 27, 0.27)",
-            "threshold2": null,
-            "threshold2Color": "rgba(234, 112, 112, 0.22)"
-          },
+          "grid": {},
           "height": "250px",
           "id": 3,
-          "isNew": true,
           "legend": {
             "alignAsTable": true,
             "avg": true,
@@ -221,30 +138,46 @@
           "pointradius": 5,
           "points": false,
           "renderer": "flot",
+          "scopedVars": {
+            "zone": {
+              "selected": true,
+              "text": "jeromecommits.com",
+              "value": "52430cb2513a71a1532efcc836a7dd03"
+            }
+          },
           "seriesOverrides": [],
           "span": 6,
           "stack": true,
           "steppedLine": false,
           "targets": [
             {
+              "dimensions": "coloName",
+              "filters": [],
+              "from": "zone",
+              "metrics": [
+                "queryCount"
+              ],
               "refId": "A",
-              "tag": "$zone",
-              "metrics": ["queryCount"],
-              "dimensions": "coloName"
+              "tag": "$zone"
             }
           ],
+          "thresholds": [],
           "timeFrom": null,
           "timeShift": null,
           "title": "$zone by colo",
           "tooltip": {
             "msResolution": false,
             "shared": true,
+            "sort": 0,
             "value_type": "individual"
           },
           "transparent": false,
           "type": "graph",
           "xaxis": {
-            "show": false
+            "mode": "time",
+            "name": null,
+            "show": false,
+            "values": []
           },
           "yaxes": [
             {
@@ -264,8 +197,250 @@
               "show": true
             }
           ]
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "datasource": "cloudflare",
+          "editable": true,
+          "error": false,
+          "fill": 1,
+          "grid": {},
+          "height": "250px",
+          "id": 2,
+          "legend": {
+            "alignAsTable": true,
+            "avg": true,
+            "current": true,
+            "hideEmpty": true,
+            "hideZero": true,
+            "max": true,
+            "min": true,
+            "rightSide": false,
+            "show": true,
+            "total": false,
+            "values": true
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [],
+          "minSpan": 6,
+          "nullPointMode": "connected",
+          "percentage": false,
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "scopedVars": {
+            "zone": {
+              "selected": true,
+              "text": "jeromecommits.com",
+              "value": "52430cb2513a71a1532efcc836a7dd03"
+            }
+          },
+          "seriesOverrides": [],
+          "span": 6,
+          "stack": true,
+          "steppedLine": false,
+          "targets": [
+            {
+              "dimensions": "queryType",
+              "filters": [],
+              "from": "zone",
+              "metrics": [
+                "queryCount"
+              ],
+              "refId": "A",
+              "tag": "$zone"
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "$zone by query type",
+          "tooltip": {
+            "msResolution": false,
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "transparent": false,
+          "type": "graph",
+          "xaxis": {
+            "mode": "time",
+            "name": null,
+            "show": false,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "format": "pps",
+              "label": "Query rate",
+              "logBase": 1,
+              "max": null,
+              "min": 0,
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ]
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "datasource": "cloudflare",
+          "fill": 1,
+          "id": 4,
+          "legend": {
+            "alignAsTable": true,
+            "avg": true,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "sort": "avg",
+            "sortDesc": true,
+            "total": false,
+            "values": true
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [],
+          "nullPointMode": "null",
+          "percentage": false,
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "span": 8,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "dimensions": "queryName",
+              "filters": [
+                {
+                  "key": "responseCode",
+                  "operator": "=",
+                  "value": "NXDOMAIN"
+                }
+              ],
+              "from": "zone",
+              "metrics": [
+                "queryCount"
+              ],
+              "refId": "A",
+              "tag": "$zone"
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Query names returning NXDOMAIN",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ]
+        },
+        {
+          "columns": [
+            {
+              "text": "Count",
+              "value": "count"
+            }
+          ],
+          "datasource": "cloudflare",
+          "fontSize": "100%",
+          "id": 6,
+          "links": [],
+          "pageSize": null,
+          "scroll": true,
+          "showHeader": true,
+          "sort": {
+            "col": 1,
+            "desc": true
+          },
+          "span": 4,
+          "styles": [
+            {
+              "dateFormat": "YYYY-MM-DD HH:mm:ss",
+              "pattern": "Time",
+              "type": "date"
+            },
+            {
+              "colorMode": null,
+              "colors": [
+                "rgba(50, 172, 45, 0.97)",
+                "rgba(237, 129, 40, 0.89)",
+                "rgba(245, 54, 54, 0.9)"
+              ],
+              "decimals": 0,
+              "pattern": "/.*/",
+              "thresholds": [],
+              "type": "number",
+              "unit": "short"
+            }
+          ],
+          "targets": [
+            {
+              "dimensions": "coloName",
+              "filters": [
+                {
+                  "key": "responseCode",
+                  "operator": "=",
+                  "value": "NXDOMAIN"
+                }
+              ],
+              "from": "zone",
+              "metrics": [
+                "queryCount"
+              ],
+              "refId": "A",
+              "tag": "$zone"
+            }
+          ],
+          "title": "# of NXDOMAIN per colo",
+          "transform": "table",
+          "type": "table"
         }
-      ]
+      ],
+      "repeat": "zone",
+      "repeatIteration": null,
+      "repeatRowId": null,
+      "showTitle": true,
+      "title": "$zone",
+      "titleSize": "h6"
     }
   ],
   "timepicker": {
