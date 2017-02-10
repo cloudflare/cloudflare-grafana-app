@@ -34,7 +34,7 @@ Visit `http://localhost:3000/` and use `admin:admin` (user:password) to log in. 
 Give your team a quick view into DNS traffic. This app provides instant visibility into query rates and latencies, and Cloudflare's high frequency monitoring service.
 
 ### Supported metrics
-- Queries per second, broken down by response code
+- Queries per second, broken down by dimensions and filters
 - DNS latency monitoring
 
 ## Getting Help
@@ -44,7 +44,7 @@ Give your team a quick view into DNS traffic. This app provides instant visibili
 - [Cloudflare Knowledge Base](https://support.cloudflare.com/hc)
 
 ### Feedback and Questions
-We would love to hear what you think of this app and if you have any feature requests for future versions. Pleaes submit any issues with the app on [Github](https://github.com/cloudflare/cloudflare-grafana-app/issues) or [contact us directly](https://www.cloudflare.com).
+We would love to hear what you think of this app and if you have any feature requests for future versions. Please submit any issues with the app on [Github](https://github.com/cloudflare/cloudflare-grafana-app/issues) or [contact us directly](https://www.cloudflare.com).
 
 ## License
-BSD 3-clause licensed. See the LICENSE file for details.
+Apache 2.0 licensed. See the LICENSE file for details.
