@@ -1,24 +1,27 @@
 language: node_js
 sudo: false
 
+cache:
+  directories:
+    - node_modules
+
 node_js:
   # Latest Node version
   - node
 
 install:
-  - make get-deps
+  - npm install grunt-cli
+  - npm install
 
 script:
-  - make build
-  - tar cvf cloudflare-grafana-plugin-`git rev-parse --short HEAD`.tar dist
+  - ./node_modules/.bin/grunt
+  - tar cvf cloudflare-grafana-app-`git rev-parse --short HEAD`.tar dist
 
 deploy:
   provider: releases
-  skip_cleanup: true
+  file: cloudflare-grafana-app-`git rev-parse --short HEAD`.tar
   api_key:
-    secure: wHqq6Em56Dhkq4GHqdTXfNWB1NU2ixD0/z88Hu31MFXc+Huz5p6np0PUNBOvO9jSFpSzrSGFpsD5lkExAU9rBOI9owSRiEHpR1krIFbMmCboNqNr1uXxzxam9NWLgH8ltL2LNX3hp5teYnNpE4EhIDsGqORR4BrgXfH4eK7mvj/93kDRF2Wxt1slRh9VlxPSQEUxJ1iQNy3lbZ6U2+wouD8TaaJFgzPtueMyyIj2ASQdSlWMRyCVXJPKKgbRd5jLo2XHAWmmDb9mC8u8RS5QlB1klJjGCOl7gNC0KHYknHk6sUVpgIdnmszQBdVMlrZ6yToFDSFI28pj0PDmpb3KFfLauatyQ/bOfDoJFQQWgxyy30du89PawLmqeMoIXUQoA8IWF3nl/YhD+xsLCL1UH3kZdVZStwS/EhMcKqXBPn/AFi1Vbh7m+OMJAVvZp3xnFDe/H8tymczOWy4vDnyfXZQagLMsTouS/SosCFjjeL/Rdz6AEcQRq5bYAiQBhjVwlobNxZSMXWatNSaGz3z78dPEx9qfHnKixmBTacrJd6NlBhWH1kvg1c7TT2zlPxt6XTtsq7Ts/oKNF2iXXhw8HuzZv1idCiWfxobdajZE3EY+8akR060ktT4KEgRmCC/0h6ncPVT0Vaba1XZvbjlraol/p3tswXgGodPsKL87AgM=
-  file:
-  - cloudflare-grafana-plugin-`git rev-parse --short HEAD`.tar
+    secure: lMImky9qzUSxax8B5RN08IDecjz6V8M1gaS+ZOv6HZT95kDQUH2wZbYauh3qyvsunDFt32iRZAISRw7Ld+v1uBZbI2n/LhhJUzh3VwpczSe5C2GQZuBYkILGSIFyaO2/7pnSM8FwEhPrVv6Yjmoz00gAYvZZLsWJ+7RYCT7+zquT2wwputWLbA6s+80K3ogpG/KSYgWMTEwevnEcQC9FCemTZvqIrm1FKlcxrKkj3SqHeXkY7sMQZpW3ghkI7w3dUA0R8Iv+O4/8vTdBGXCdOkO6JE+ip23jW2d4KE8vngYr6k+p0yhfo4mSowHTwqLHqlVs31FptSEA21l5emzLS/G0y0ABbtKi4UHgc38Tx5vDq6YXcog0M5vE6fdojVJT0U5X+ijQiLTeZ53bz6qYJrjQ85Cc/tYwNlPFKTbirhEV4V713KUmys2t4UEJX/5M4H+3XYKru4WzfkGgScf4nK3YhDVacwDBgB8Omc7DLF/5sKkmz4DHgnAlQnXPob+KSgiLv70kJxTA0zxpBa1sEpFbxv41BCwpiajJCz0iJNKpuXq7cXFW0yIp6IxIFyqi8RIABH9+El2LR+rfCdRcQVsdWkAnI/OrKmwiWbRDUBX5rDGG+KX1jzWi30atGp7rws553d33dqD/KgcwS6aO70u5V/RI/IWftq3mVgffHGk=
   on:
-    repo: cloudflare/cloudflare-grafana-plugin
+    repo: cloudflare/cloudflare-grafana-app
     tags: true
