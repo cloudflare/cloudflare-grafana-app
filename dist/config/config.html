@@ -1,0 +1,44 @@
+<h3 class="page-heading">Enter your Cloudflare API Credentials</h3>
+<div class="gf-form-group">
+	<div class="gf-form" ng-if="ctrl.apiError && ctrl.appModel.enabled">
+		<span>Invalid API credentials. This app wont work until the credentials are updated.</span>
+	</div>
+	<div class="gf-form">
+		<label class="gf-form-label width-10">Email</label>
+		<!-- Hidden input to stop chrome from autofilling -->
+		<input style="display:none;" type="text" name="somefakename" />
+		<input type="text" class="gf-form-input max-width-20" ng-model='ctrl.appModel.jsonData.email' placeholder="email"></input>
+	</div>
+	<div class="gf-form-inline">
+		<div class="gf-form cf-inline-field-margin--right">
+			<label class="gf-form-label width-10">API Token</label>
+			<!-- Hidden input to stop chrome from autofilling -->
+			<input style="display:none;" type="password" name="anotherfakename" />
+			<input type="password" class="gf-form-input max-width-20" ng-model="ctrl.appModel.secureJsonData.token" ng-if="!ctrl.appModel.jsonData.tokenSet" placeholder="api token"/>
+			<div ng-if="ctrl.appModel.jsonData.tokenSet" class="gf-form">
+				<input type="text" class="gf-form-input max-width-20" disabled="disabled" value="saved" />
+				<div ng-if="ctrl.appModel.enabled">
+					<i class="fa fa-exclamation-triangle" ng-if="!ctrl.apiValidated" alt="Could not validate api Token."></i>
+				</div>
+			</div>
+		</div>
+		<div class="gf-form">
+			<a class="btn btn-danger btn-small" href="#" ng-click="ctrl.reset()" ng-if="ctrl.appModel.jsonData.tokenSet">reset</a>
+		</div>
+	</div>
+	<div class="gf-form-inline">
+		<div class="gf-form">
+			<label class="gf-form-label width-10">Organizations</label>
+		</div>
+
+		<div class="gf-form" ng-repeat="m in ctrl.appModel.jsonData.organizations track by $index" class="gf-form">
+			<label class="gf-form-label">
+				{{m.name}} ({{m.status}})
+			</label>
+		</div>
+	</div>
+</div>
+
+<div ng-if="ctrl.appModel.jsonData.tokenSet" class="cf-enabled-box">
+	<i class="icon-gf icon-gf-check icon-gf-check cf-icon-success"></i> Successfully enabled. <strong>
+</div>

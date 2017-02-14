@@ -1,0 +1,85 @@
+<query-editor-row query-ctrl="ctrl" can-collapse="false">
+	<div class="gf-form-inline">
+		<div class="gf-form">
+			<label class="gf-form-label query-keyword width-8">Source</label>
+			<div class="gf-form-select-wrapper width-11">
+				<select class="gf-form-input" ng-model="ctrl.target.from" ng-options="f.value as f.text for f in ctrl.queryModes" ng-change="ctrl.refresh()"></select>
+			</div>
+		</div>
+		<div class="gf-form">
+			<label class="gf-form-label query-keyword width-8">
+				Tag <info-popover mode="right-normal">Use Zone Tag for zone analytics, or Virtual DNS cluster for Virtual DNS.</info-popover>
+			</label>
+			<input type="text" class="gf-form-input width-11" ng-model="ctrl.target.tag"></input>
+		</div>
+		<div class="gf-form">
+			<label class="gf-form-label query-keyword width-8">Group By</label>
+			<div class="gf-form-select-wrapper width-11">
+				<select class="gf-form-input" ng-model="ctrl.target.dimensions" ng-options="f.value as f.text for f in ctrl.dimensions" ng-change="ctrl.refresh()"></select>
+			</div>
+		</div>
+		<div class="gf-form gf-form--grow">
+			<div class="gf-form-label gf-form-label--grow"></div>
+		</div>
+	</div>
+
+
+	<div class="gf-form-inline">
+		<div class="gf-form">
+			<label class="gf-form-label query-keyword width-8">Metrics</label>
+		</div>
+
+		<div class="gf-form" ng-repeat="m in ctrl.target.metrics track by $index" class="gf-form">
+			<label class="gf-form-label">
+				{{m}}
+				<a ng-click="ctrl.removeMetric(m)">
+					<i class="fa fa-remove"></i>
+				</a>
+			</label>
+		</div>
+
+		<div class="gf-form" ng-hide="ctrl.addMetricMode">
+			<label class="gf-form-label query-keyword">
+				<a ng-click="ctrl.addMetric()"><i class="fa fa-plus"></i></a>
+			</label>
+		</div>
+
+		<div class="gf-form" ng-show="ctrl.addMetricMode">
+			<div class="gf-form-select-wrapper width-11">
+				<select class="gf-form-input" ng-model="ctrl.target.currentMetricKey" ng-options="f.value as f.text for f in ctrl.metrics"></select>
+			</div>
+
+			<label class="gf-form-label" >
+				<a ng-click="ctrl.addMetric()">Add</a>
+				<a ng-click="ctrl.closeAddMetricMode()"><i class="fa fa-remove"></i></a>
+			</label>
+		</div>
+
+		<div class="gf-form gf-form--grow">
+			<div class="gf-form-label gf-form-label--grow"></div>
+		</div>
+	</div>
+
+	<div class="gf-form-inline">
+		<div class="gf-form">
+			<label class="gf-form-label query-keyword width-8">Filters</label>
+		</div>
+
+		<div ng-repeat="segment in ctrl.segments" role="menuitem" class="gf-form">
+			<metric-segment segment="segment" get-options="ctrl.getOptions(segment, $index)" on-change="ctrl.segmentChanged(segment, $index)"></metric-segment>
+		</div>
+
+		<div ng-repeat="func in ctrl.functions" class="gf-form">
+			<span graphite-func-editor class="gf-form-label query-part"></span>
+		</div>
+
+		<div class="gf-form dropdown">
+			<span graphite-add-func></span>
+		</div>
+
+		<div class="gf-form gf-form--grow">
+			<div class="gf-form-label gf-form-label--grow"></div>
+		</div>
+	</div>
+
+</query-editor-row>

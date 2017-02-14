@@ -1,0 +1,1 @@
+{"version":3,"sources":["../src/module.js"],"names":["ConfigCtrl","loadPluginCss"],"mappings":";;;;;;;;AAAQA,gB,mBAAAA,U;;AACAC,mB,kBAAAA,a;;;4BAGND,U","file":"module.js","sourcesContent":["import {ConfigCtrl} from './config/config.js';\nimport {loadPluginCss} from 'app/plugins/sdk';\n\nexport {\n  ConfigCtrl\n};\n"]}
