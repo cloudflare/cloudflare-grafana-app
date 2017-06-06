@@ -50,7 +50,8 @@ class CloudflareConfigCtrl {
       let promises = [];
       let organizations = [];
       this.appModel.jsonData.clusters = [];
-      resp.result.organizations.forEach(e => {
+      let organizationList = resp.result.organizations || [];
+      organizationList.forEach(e => {
         if (e.name != "SELF") {
           organizations.push({name: e.name, id: e.id, status: e.status});
           /* Update list of clusters */
@@ -58,12 +59,18 @@ class CloudflareConfigCtrl {
             this.baseUrl + '/organizations/' + e.id + '/virtual_dns').then(resp => {
               resp.result.forEach(c => {
                 c.organization = e.id;
-                this.appModel.jsonData.clusters.push(c);  
+                this.appModel.jsonData.clusters.push(c);
               });
           }));
         }
       });
-
+      /* Update user-level list of clusters */
+      promises.push(this.backendSrv.get(
+        this.baseUrl + '/user/virtual_dns').then(resp => {
+          resp.result.forEach(c => {
+            this.appModel.jsonData.clusters.push(c);
+          });
+      }));
       this.appModel.jsonData.organizations = organizations;
       return Promise.all(promises);
     }, () => {

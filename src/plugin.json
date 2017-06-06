@@ -36,8 +36,8 @@
       {"name": "Dashboard: Zones", "path": "img/cf_dashboard_zones.png"},
       {"name": "Dashboard: Virtual DNS", "path": "img/cf_dashboard_virtualdns.png"}
     ],
-    "version": "0.1.1",
-    "updated": "2017-02-14"
+    "version": "0.1.2",
+    "updated": "2017-06-05"
   },
 
   "includes": [

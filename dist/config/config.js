@@ -91,7 +91,8 @@ System.register(['./config.html!text', 'lodash'], function (_export, _context) {
               var promises = [];
               var organizations = [];
               _this.appModel.jsonData.clusters = [];
-              resp.result.organizations.forEach(function (e) {
+              var organizationList = resp.result.organizations || [];
+              organizationList.forEach(function (e) {
                 if (e.name != "SELF") {
                   organizations.push({ name: e.name, id: e.id, status: e.status });
                   /* Update list of clusters */
@@ -103,7 +104,12 @@ System.register(['./config.html!text', 'lodash'], function (_export, _context) {
                   }));
                 }
               });
-
+              /* Update user-level list of clusters */
+              promises.push(_this.backendSrv.get(_this.baseUrl + '/user/virtual_dns').then(function (resp) {
+                resp.result.forEach(function (c) {
+                  _this.appModel.jsonData.clusters.push(c);
+                });
+              }));
               _this.appModel.jsonData.organizations = organizations;
               return Promise.all(promises);
             }, function () {
