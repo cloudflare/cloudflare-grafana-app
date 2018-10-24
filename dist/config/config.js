@@ -38,6 +38,8 @@ System.register(['./config.html!text', 'lodash'], function (_export, _context) {
 
       _export('ConfigCtrl', CloudflareConfigCtrl = function () {
         function CloudflareConfigCtrl($scope, $injector, backendSrv) {
+          var _this = this;
+
           _classCallCheck(this, CloudflareConfigCtrl);
 
           this.baseUrl = 'api/plugin-proxy/cloudflare-app/api/v4';
@@ -52,10 +54,16 @@ System.register(['./config.html!text', 'lodash'], function (_export, _context) {
           if (!this.appModel.secureJsonData) {
             this.appModel.secureJsonData = {};
           }
+
           this.apiValidated = false;
           this.apiError = false;
+
           if (this.appModel.enabled && this.appModel.jsonData.tokenSet) {
-            this.validateApiConnection();
+            this.validateApiConnection().then(function (is_updated) {
+              if (is_updated) {
+                _this.appEditCtrl.update();
+              }
+            });
           }
         }
 
@@ -74,49 +82,58 @@ System.register(['./config.html!text', 'lodash'], function (_export, _context) {
             if (!this.appModel.enabled) {
               return Promise.resolve();
             }
-            var self = this;
-            return this.validateApiConnection().then(function () {
-              return self.appEditCtrl.importDashboards();
-            });
+
+            return this.appEditCtrl.importDashboards();
           }
         }, {
           key: 'validateApiConnection',
           value: function validateApiConnection() {
-            var _this = this;
-
+            var self = this;
+            var is_updated = false;
             var promise = this.backendSrv.get(this.baseUrl + '/user');
-            promise.then(function (resp) {
-              _this.apiValidated = true;
+            return promise.then(function (resp) {
+              self.apiValidated = true;
               /* Update organizations list */
               var promises = [];
               var organizations = [];
-              _this.appModel.jsonData.clusters = [];
               var organizationList = resp.result.organizations || [];
+              var clusters = [];
               organizationList.forEach(function (e) {
-                if (e.name != "SELF") {
+                if (e.name != "SELF" && e.id != "0") {
                   organizations.push({ name: e.name, id: e.id, status: e.status });
                   /* Update list of clusters */
-                  promises.push(_this.backendSrv.get(_this.baseUrl + '/organizations/' + e.id + '/virtual_dns').then(function (resp) {
+                  promises.push(self.backendSrv.get(self.baseUrl + '/organizations/' + e.id + '/virtual_dns').then(function (resp) {
                     resp.result.forEach(function (c) {
                       c.organization = e.id;
-                      _this.appModel.jsonData.clusters.push(c);
+                      clusters.push({ id: c.id, organization: c.organization, name: c.name });
                     });
                   }));
                 }
               });
               /* Update user-level list of clusters */
-              promises.push(_this.backendSrv.get(_this.baseUrl + '/user/virtual_dns').then(function (resp) {
+              promises.push(self.backendSrv.get(self.baseUrl + '/user/virtual_dns').then(function (resp) {
                 resp.result.forEach(function (c) {
-                  _this.appModel.jsonData.clusters.push(c);
+                  clusters.push({ id: c.id, name: c.name });
                 });
               }));
-              _this.appModel.jsonData.organizations = organizations;
-              return Promise.all(promises);
+              self.appModel.jsonData.organizations = organizations;
+              return Promise.all(promises).then(function () {
+                var previous = self.appModel.jsonData.clusters.map(function (x) {
+                  return x.id;
+                }).sort();
+                var next = clusters.map(function (x) {
+                  return x.id;
+                }).sort();
+                is_updated = !_.isEqual(previous, next);
+                self.appModel.jsonData.clusters = clusters;
+              });
             }, function () {
-              _this.apiValidated = false;
-              _this.apiError = true;
+              self.apiValidated = false;
+              self.apiError = true;
+              return [];
+            }).then(function () {
+              return Promise.resolve(is_updated);
             });
-            return promise;
           }
         }, {
           key: 'reset',
@@ -134,27 +151,19 @@ System.register(['./config.html!text', 'lodash'], function (_export, _context) {
             /* Check for existing datasource, or create a new one */
             var self = this;
             return self.backendSrv.get('api/datasources').then(function (results) {
-              var foundDs = false;
-              _.forEach(results, function (ds) {
-                if (foundDs) {
-                  return;
-                }
-                if (ds.name === "cloudflare") {
-                  foundDs = true;
-                }
+              var exists = results.some(function (ds) {
+                return ds.name === "cloudflare";
               });
-              /* Create a new datasource */
-              var promises = [];
-              if (!foundDs) {
-                var ds = {
-                  name: 'cloudflare',
-                  type: 'cloudflare-api',
-                  access: 'direct',
-                  jsonData: {}
-                };
-                promises.push(self.backendSrv.post('api/datasources', ds));
+              if (exists) {
+                return Promise.resolve();
               }
-              return Promise.all(promises);
+              /* Create a new datasource */
+              return self.backendSrv.post('api/datasources', {
+                name: 'cloudflare',
+                type: 'cloudflare-api',
+                access: 'direct',
+                jsonData: {}
+              });
             });
           }
         }]);

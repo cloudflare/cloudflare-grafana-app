@@ -84,25 +84,23 @@ System.register(['./metric_def', 'angular', 'lodash', 'moment'], function (_expo
         _createClass(CloudflareProxy, [{
           key: 'fetchConfig',
           value: function fetchConfig() {
-            var _this = this;
-
             if (this.config) {
               return Promise.resolve(this.config);
             }
             var self = this;
             /* Resolve organizations for this datasource */
             return this.backendSrv.get('api/plugins/cloudflare-app/settings').then(function (resp) {
-              _this.config = resp.jsonData;
-              return _this.config;
+              self.config = resp.jsonData;
+              return self.config;
             }, function () {
-              _this.config = {};
-              return _this.config;
+              self.config = {};
+              return self.config;
             });
           }
         }, {
           key: 'fetchData',
           value: function fetchData(query) {
-            var _this2 = this;
+            var _this = this;
 
             var cached_query = _.cloneDeep(query);
             var hash = getHash(cached_query);
@@ -110,7 +108,7 @@ System.register(['./metric_def', 'angular', 'lodash', 'moment'], function (_expo
             if (this.notCached(query)) {
               return this.api(query).then(function (result) {
                 var timestamp = getUTCTimestamp();
-                _this2.cache[hash] = {
+                _this.cache[hash] = {
                   timestamp: timestamp,
                   query: cached_query,
                   result: result
@@ -140,7 +138,7 @@ System.register(['./metric_def', 'angular', 'lodash', 'moment'], function (_expo
         }, {
           key: 'fetchTag',
           value: function fetchTag(query) {
-            var _this3 = this;
+            var _this2 = this;
 
             /* Break tag and scope */
             var scope = query.tag.split('/', 2);
@@ -177,7 +175,7 @@ System.register(['./metric_def', 'angular', 'lodash', 'moment'], function (_expo
                   if (scope) {
                     id = id + '/' + scope;
                   }
-                  _this3.tags[key] = id;
+                  _this2.tags[key] = id;
                   /* Replace query tag and return */
                   query.tag = id;
                   return id;
@@ -188,13 +186,13 @@ System.register(['./metric_def', 'angular', 'lodash', 'moment'], function (_expo
         }, {
           key: 'fetchOrganizations',
           value: function fetchOrganizations() {
-            var _this4 = this;
+            var _this3 = this;
 
             return this.fetchConfig().then(function () {
-              if (!_this4.config.organizations) {
+              if (!_this3.config.organizations) {
                 return [];
               }
-              return _this4.config.organizations;
+              return _this3.config.organizations;
             });
           }
         }, {
@@ -222,13 +220,13 @@ System.register(['./metric_def', 'angular', 'lodash', 'moment'], function (_expo
         }, {
           key: 'fetchClusters',
           value: function fetchClusters() {
-            var _this5 = this;
+            var _this4 = this;
 
             return this.fetchConfig().then(function () {
-              if (!_this5.config.clusters) {
+              if (!_this4.config.clusters) {
                 return [];
               }
-              return _this5.config.clusters.map(function (e) {
+              return _this4.config.clusters.map(function (e) {
                 /* Glue organisation id to cluster id
                  * so that metric fetching knows whether to call
                  * organizations or user endpoint */

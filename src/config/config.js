@@ -16,10 +16,16 @@ class CloudflareConfigCtrl {
     if (!this.appModel.secureJsonData) {
       this.appModel.secureJsonData = {};
     }
+
     this.apiValidated = false;
     this.apiError = false;
+
     if (this.appModel.enabled && this.appModel.jsonData.tokenSet) {
-      this.validateApiConnection();
+      this.validateApiConnection().then((is_updated) => {
+        if (is_updated) {
+          this.appEditCtrl.update();
+        }
+      });
     }
   }
 
@@ -35,49 +41,56 @@ class CloudflareConfigCtrl {
     if (!this.appModel.enabled) {
       return Promise.resolve();
     }
-    var self = this;
-    return this.validateApiConnection().then(() => {
-      return self.appEditCtrl.importDashboards()
-    });
+
+    return this.appEditCtrl.importDashboards();
   }
 
   /* Make sure that we can hit the Cloudflare API. */
   validateApiConnection() {
+    var self = this;
+    let is_updated = false;
     var promise = this.backendSrv.get(this.baseUrl + '/user');
-    promise.then((resp) => {
-      this.apiValidated = true;
+    return promise.then((resp) => {
+      self.apiValidated = true;
       /* Update organizations list */
       let promises = [];
       let organizations = [];
-      this.appModel.jsonData.clusters = [];
       let organizationList = resp.result.organizations || [];
+      let clusters = [];
       organizationList.forEach(e => {
-        if (e.name != "SELF") {
+        if (e.name != "SELF" && e.id != "0") {
           organizations.push({name: e.name, id: e.id, status: e.status});
           /* Update list of clusters */
-          promises.push(this.backendSrv.get(
-            this.baseUrl + '/organizations/' + e.id + '/virtual_dns').then(resp => {
+          promises.push(self.backendSrv.get(
+            self.baseUrl + '/organizations/' + e.id + '/virtual_dns').then(resp => {
               resp.result.forEach(c => {
                 c.organization = e.id;
-                this.appModel.jsonData.clusters.push(c);
+                clusters.push({id: c.id, organization: c.organization, name: c.name});
               });
           }));
         }
       });
       /* Update user-level list of clusters */
-      promises.push(this.backendSrv.get(
-        this.baseUrl + '/user/virtual_dns').then(resp => {
+      promises.push(self.backendSrv.get(
+        self.baseUrl + '/user/virtual_dns').then(resp => {
           resp.result.forEach(c => {
-            this.appModel.jsonData.clusters.push(c);
+            clusters.push({id: c.id, name: c.name});
           });
       }));
-      this.appModel.jsonData.organizations = organizations;
-      return Promise.all(promises);
+      self.appModel.jsonData.organizations = organizations;
+      return Promise.all(promises).then(() => {
+        var previous = self.appModel.jsonData.clusters.map(x => { return x.id }).sort();
+        var next = clusters.map(x => { return x.id }).sort();
+        is_updated = !_.isEqual(previous, next);
+        self.appModel.jsonData.clusters = clusters;
+      })
     }, () => {
-      this.apiValidated = false;
-      this.apiError = true;
+      self.apiValidated = false;
+      self.apiError = true;
+      return [];
+    }).then(() => {
+      return Promise.resolve(is_updated);
     });
-    return promise;
   }
 
   reset() {
@@ -93,25 +106,19 @@ class CloudflareConfigCtrl {
     /* Check for existing datasource, or create a new one */
     var self = this;
     return self.backendSrv.get('api/datasources').then(function(results) {
-      var foundDs = false;
-      _.forEach(results, function(ds) {
-        if (foundDs) { return; }
-        if (ds.name === "cloudflare") {
-          foundDs = true;
-        }
+      var exists = results.some((ds) => {
+        return ds.name === "cloudflare";
       });
+      if (exists) {
+        return Promise.resolve();
+      }
       /* Create a new datasource */
-      var promises = [];
-      if (!foundDs) {
-        var ds = {
+      return self.backendSrv.post('api/datasources', {
           name: 'cloudflare',
           type: 'cloudflare-api',
           access: 'direct',
           jsonData: {},
-        };
-        promises.push(self.backendSrv.post('api/datasources', ds));
-      }
-      return Promise.all(promises);
+      });
     });
   }
 }

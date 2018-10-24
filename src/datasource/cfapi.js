@@ -49,11 +49,11 @@ class CloudflareProxy {
     var self = this;
     /* Resolve organizations for this datasource */
     return this.backendSrv.get('api/plugins/cloudflare-app/settings').then(resp => {
-      this.config = resp.jsonData;
-      return this.config;
+      self.config = resp.jsonData;
+      return self.config;
     }, () => {
-      this.config = {};
-      return this.config;
+      self.config = {};
+      return self.config;
     });
   }
 
