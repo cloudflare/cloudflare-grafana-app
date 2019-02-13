@@ -36,8 +36,8 @@
       {"name": "Dashboard: Zones", "path": "img/cf_dashboard_zones.png"},
       {"name": "Dashboard: DNS Firewall", "path": "img/cf_dashboard_virtualdns.png"}
     ],
-    "version": "0.1.3",
-    "updated": "2018-10-23"
+    "version": "0.1.4",
+    "updated": "2019-02-13"
   },
 
   "includes": [
