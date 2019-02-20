@@ -58,7 +58,7 @@ class CloudflareDatasource {
       bytime: true
     };
 
-    let panel = this.dashboardSrv.dash.getPanelInfoById(options.panelId);
+    let panel = this.dashboardSrv.getCurrent().getPanelInfoById(options.panelId);
     if (panel) {
       query.bytime = (panel.panel.type != 'table');
     }

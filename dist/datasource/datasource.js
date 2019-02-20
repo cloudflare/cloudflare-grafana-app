@@ -102,7 +102,7 @@ System.register(['./metric_def', 'lodash', 'app/core/table_model', './cfapi'], f
               bytime: true
             };
 
-            var panel = this.dashboardSrv.dash.getPanelInfoById(options.panelId);
+            var panel = this.dashboardSrv.getCurrent().getPanelInfoById(options.panelId);
             if (panel) {
               query.bytime = panel.panel.type != 'table';
             }
