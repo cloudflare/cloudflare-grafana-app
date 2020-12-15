@@ -202,9 +202,8 @@ System.register(['./metric_def', 'angular', 'lodash', 'moment'], function (_expo
             var params = {
               status: 'active',
               per_page: 50
-            };
-            /* Get list of zones */
-            return this._get('/api/v4/zones', params).then(function (resp) {
+              /* Get list of zones */
+            };return this._get('/api/v4/zones', params).then(function (resp) {
               var data = resp['data'];
               if (!data || !data.success) {
                 return [];
