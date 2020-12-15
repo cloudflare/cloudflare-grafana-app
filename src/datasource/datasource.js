@@ -167,8 +167,8 @@ class CloudflareDatasource {
     if (query === 'clusters()') {
       return this.api.fetchClusters();
     }
-    if (query === 'organizations()') {
-      return this.api.fetchOrganizations();
+    if (query === 'accounts()') {
+      return this.api.fetchAccounts();
     }
     return this.api.fetchZones();
   }
