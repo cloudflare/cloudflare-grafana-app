@@ -1,7 +1,7 @@
 <h3 class="page-heading">Enter your Cloudflare API Credentials</h3>
 <div class="gf-form-group">
 	<div class="gf-form" ng-if="ctrl.apiError && ctrl.appModel.enabled">
-		<span>Invalid API credentials. This app wont work until the credentials are updated.</span>
+		<span>Invalid API credentials. This app won&rsquo;t work until the credentials are updated.</span>
 	</div>
 	<div class="gf-form">
 		<label class="gf-form-label width-10">Email</label>
@@ -11,14 +11,14 @@
 	</div>
 	<div class="gf-form-inline">
 		<div class="gf-form cf-inline-field-margin--right">
-			<label class="gf-form-label width-10">API Token</label>
+			<label class="gf-form-label width-10">API Key</label>
 			<!-- Hidden input to stop chrome from autofilling -->
 			<input style="display:none;" type="password" name="anotherfakename" />
-			<input type="password" class="gf-form-input max-width-20" ng-model="ctrl.appModel.secureJsonData.token" ng-if="!ctrl.appModel.jsonData.tokenSet" placeholder="api token"/>
+			<input type="password" class="gf-form-input max-width-20" ng-model="ctrl.appModel.secureJsonData.token" ng-if="!ctrl.appModel.jsonData.tokenSet"/>
 			<div ng-if="ctrl.appModel.jsonData.tokenSet" class="gf-form">
 				<input type="text" class="gf-form-input max-width-20" disabled="disabled" value="saved" />
 				<div ng-if="ctrl.appModel.enabled">
-					<i class="fa fa-exclamation-triangle" ng-if="!ctrl.apiValidated" alt="Could not validate api Token."></i>
+					<i class="fa fa-exclamation-triangle" ng-if="!ctrl.apiValidated" alt="Could not validate API key."></i>
 				</div>
 			</div>
 		</div>
@@ -40,5 +40,6 @@
 </div>
 
 <div ng-if="ctrl.appModel.jsonData.tokenSet" class="cf-enabled-box">
-	<i class="icon-gf icon-gf-check icon-gf-check cf-icon-success"></i> Successfully enabled. <strong>
+	<i class="icon-gf icon-gf-check icon-gf-check cf-icon-success"></i>
+	<strong>Successfully enabled.</strong>
 </div>
