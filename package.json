@@ -37,7 +37,7 @@
     "grunt-contrib-jshint": "^1.0.0",
     "grunt-jscs": "^2.8.0",
     "jshint-stylish": "~2.1.0",
-    "lodash": "~4.0.0",
+    "lodash": "~4.17.19",
     "yarn": "^1.22.10"
   },
   "homepage": "https://github.com/cloudflare/cloudflare-grafana-app#readme"
