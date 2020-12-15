@@ -49,35 +49,26 @@ class CloudflareConfigCtrl {
   validateApiConnection() {
     var self = this;
     let is_updated = false;
-    var promise = this.backendSrv.get(this.baseUrl + '/user');
+    var promise = this.backendSrv.get(this.baseUrl + '/accounts');
     return promise.then((resp) => {
       self.apiValidated = true;
-      /* Update organizations list */
+      /* Update accounts list */
       let promises = [];
-      let organizations = [];
-      let organizationList = resp.result.organizations || [];
+      let accounts = [];
+      let accountList = resp.result || [];
       let clusters = [];
-      organizationList.forEach(e => {
-        if (e.name != "SELF" && e.id != "0") {
-          organizations.push({name: e.name, id: e.id, status: e.status});
-          /* Update list of clusters */
-          promises.push(self.backendSrv.get(
-            self.baseUrl + '/organizations/' + e.id + '/virtual_dns').then(resp => {
-              resp.result.forEach(c => {
-                c.organization = e.id;
-                clusters.push({id: c.id, organization: c.organization, name: c.name});
-              });
-          }));
-        }
+      accountList.forEach(e => {
+        accounts.push({name: e.name, id: e.id});
+        /* Update list of clusters */
+        promises.push(self.backendSrv.get(
+          self.baseUrl + '/accounts/' + e.id + '/virtual_dns').then(resp => {
+            resp.result.forEach(c => {
+              c.account = e.id;
+              clusters.push({id: c.id, account: c.account, name: c.name});
+            });
+        }));
       });
-      /* Update user-level list of clusters */
-      promises.push(self.backendSrv.get(
-        self.baseUrl + '/user/virtual_dns').then(resp => {
-          resp.result.forEach(c => {
-            clusters.push({id: c.id, name: c.name});
-          });
-      }));
-      self.appModel.jsonData.organizations = organizations;
+      self.appModel.jsonData.accounts = accounts;
       return Promise.all(promises).then(() => {
         var previous = self.appModel.jsonData.clusters.map(x => { return x.id }).sort();
         var next = clusters.map(x => { return x.id }).sort();
@@ -95,7 +86,7 @@ class CloudflareConfigCtrl {
 
   reset() {
     this.appModel.jsonData.clusters = [];
-    this.appModel.jsonData.organizations = [];
+    this.appModel.jsonData.accounts = [];
     this.appModel.jsonData.email = '';
     this.appModel.jsonData.tokenSet = false;
     this.appModel.secureJsonData = {};

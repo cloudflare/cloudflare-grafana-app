@@ -90,33 +90,25 @@ System.register(['./config.html!text', 'lodash'], function (_export, _context) {
           value: function validateApiConnection() {
             var self = this;
             var is_updated = false;
-            var promise = this.backendSrv.get(this.baseUrl + '/user');
+            var promise = this.backendSrv.get(this.baseUrl + '/accounts');
             return promise.then(function (resp) {
               self.apiValidated = true;
-              /* Update organizations list */
+              /* Update accounts list */
               var promises = [];
-              var organizations = [];
-              var organizationList = resp.result.organizations || [];
+              var accounts = [];
+              var accountList = resp.result || [];
               var clusters = [];
-              organizationList.forEach(function (e) {
-                if (e.name != "SELF" && e.id != "0") {
-                  organizations.push({ name: e.name, id: e.id, status: e.status });
-                  /* Update list of clusters */
-                  promises.push(self.backendSrv.get(self.baseUrl + '/organizations/' + e.id + '/virtual_dns').then(function (resp) {
-                    resp.result.forEach(function (c) {
-                      c.organization = e.id;
-                      clusters.push({ id: c.id, organization: c.organization, name: c.name });
-                    });
-                  }));
-                }
+              accountList.forEach(function (e) {
+                accounts.push({ name: e.name, id: e.id });
+                /* Update list of clusters */
+                promises.push(self.backendSrv.get(self.baseUrl + '/accounts/' + e.id + '/virtual_dns').then(function (resp) {
+                  resp.result.forEach(function (c) {
+                    c.account = e.id;
+                    clusters.push({ id: c.id, account: c.account, name: c.name });
+                  });
+                }));
               });
-              /* Update user-level list of clusters */
-              promises.push(self.backendSrv.get(self.baseUrl + '/user/virtual_dns').then(function (resp) {
-                resp.result.forEach(function (c) {
-                  clusters.push({ id: c.id, name: c.name });
-                });
-              }));
-              self.appModel.jsonData.organizations = organizations;
+              self.appModel.jsonData.accounts = accounts;
               return Promise.all(promises).then(function () {
                 var previous = self.appModel.jsonData.clusters.map(function (x) {
                   return x.id;
@@ -139,7 +131,7 @@ System.register(['./config.html!text', 'lodash'], function (_export, _context) {
           key: 'reset',
           value: function reset() {
             this.appModel.jsonData.clusters = [];
-            this.appModel.jsonData.organizations = [];
+            this.appModel.jsonData.accounts = [];
             this.appModel.jsonData.email = '';
             this.appModel.jsonData.tokenSet = false;
             this.appModel.secureJsonData = {};

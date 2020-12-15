@@ -47,7 +47,7 @@ class CloudflareProxy {
       return Promise.resolve(this.config);
     }
     var self = this;
-    /* Resolve organizations for this datasource */
+    /* Resolve accounts for this datasource */
     return this.backendSrv.get('api/plugins/cloudflare-app/settings').then(resp => {
       self.config = resp.jsonData;
       return self.config;
@@ -117,10 +117,7 @@ class CloudflareProxy {
     }
     let path = 'zones';
     if (query.from == 'vdns') {
-      path = 'user/virtual_dns';
-      if (scope) {
-        path = 'organizations/' + scope + '/virtual_dns'
-      }
+      path = 'accounts/' + scope + '/virtual_dns'
     }
     /* Resolve the tag name to ID */
     return this._get('/api/v4/'+path, {name: tag}).then(resp => {
@@ -143,12 +140,12 @@ class CloudflareProxy {
     });
   }
 
-  fetchOrganizations() {
+  fetchAccounts() {
     return this.fetchConfig().then(() => {
-      if (!this.config.organizations) {
+      if (!this.config.accounts) {
         return [];
       }
-      return this.config.organizations;
+      return this.config.accounts;
     });
   }
 
@@ -179,13 +176,9 @@ class CloudflareProxy {
         return [];
       }
       return this.config.clusters.map(e => {
-        /* Glue organisation id to cluster id
-         * so that metric fetching knows whether to call
-         * organizations or user endpoint */
-        let id = e.id;
-        if (e.organization) {
-          id = id + '/' + e.organization;
-        }
+        /* Glue account ID to cluster ID so that metric fetching code knows
+         * which account ID to use in API queries. */
+        let id = e.id + '/' + e.account;
         return {text: e.name, value: id};
       });
     });
@@ -231,20 +224,11 @@ class CloudflareProxy {
     let params = this.formatQuery(query);
     let scope = query.tag.split('/', 2);
     let tag = scope[0];
-    scope = scope[1];
-    /* Add organization endpoint prefix */
-    if (scope) {
-      scope = '/api/v4/organizations/' + scope;
-    }
+    /* Add account endpoint prefix */
+    scope = '/api/v4/accounts/' + scope[1];
     /* Select either zone or cluster */
     if (query.from == 'vdns') {
-      if (!scope) {
-        scope = '/api/v4/user';
-      }
       return this._get(scope + '/virtual_dns/' + tag + endpoint, params);
-    }
-    if (!scope) {
-      scope = '/api/v4/zones';
     }
     return this._get(scope + '/' + tag + endpoint, params);
   }

@@ -215,8 +215,8 @@ System.register(['./metric_def', 'lodash', 'app/core/table_model', './cfapi'], f
             if (query === 'clusters()') {
               return this.api.fetchClusters();
             }
-            if (query === 'organizations()') {
-              return this.api.fetchOrganizations();
+            if (query === 'accounts()') {
+              return this.api.fetchAccounts();
             }
             return this.api.fetchZones();
           }

@@ -88,7 +88,7 @@ System.register(['./metric_def', 'angular', 'lodash', 'moment'], function (_expo
               return Promise.resolve(this.config);
             }
             var self = this;
-            /* Resolve organizations for this datasource */
+            /* Resolve accounts for this datasource */
             return this.backendSrv.get('api/plugins/cloudflare-app/settings').then(function (resp) {
               self.config = resp.jsonData;
               return self.config;
@@ -158,10 +158,7 @@ System.register(['./metric_def', 'angular', 'lodash', 'moment'], function (_expo
             }
             var path = 'zones';
             if (query.from == 'vdns') {
-              path = 'user/virtual_dns';
-              if (scope) {
-                path = 'organizations/' + scope + '/virtual_dns';
-              }
+              path = 'accounts/' + scope + '/virtual_dns';
             }
             /* Resolve the tag name to ID */
             return this._get('/api/v4/' + path, { name: tag }).then(function (resp) {
@@ -184,15 +181,15 @@ System.register(['./metric_def', 'angular', 'lodash', 'moment'], function (_expo
             });
           }
         }, {
-          key: 'fetchOrganizations',
-          value: function fetchOrganizations() {
+          key: 'fetchAccounts',
+          value: function fetchAccounts() {
             var _this3 = this;
 
             return this.fetchConfig().then(function () {
-              if (!_this3.config.organizations) {
+              if (!_this3.config.accounts) {
                 return [];
               }
-              return _this3.config.organizations;
+              return _this3.config.accounts;
             });
           }
         }, {
@@ -226,13 +223,9 @@ System.register(['./metric_def', 'angular', 'lodash', 'moment'], function (_expo
                 return [];
               }
               return _this4.config.clusters.map(function (e) {
-                /* Glue organisation id to cluster id
-                 * so that metric fetching knows whether to call
-                 * organizations or user endpoint */
-                var id = e.id;
-                if (e.organization) {
-                  id = id + '/' + e.organization;
-                }
+                /* Glue account ID to cluster ID so that metric fetching code knows
+                 * which account ID to use in API queries. */
+                var id = e.id + '/' + e.account;
                 return { text: e.name, value: id };
               });
             });
@@ -281,20 +274,11 @@ System.register(['./metric_def', 'angular', 'lodash', 'moment'], function (_expo
             var params = this.formatQuery(query);
             var scope = query.tag.split('/', 2);
             var tag = scope[0];
-            scope = scope[1];
-            /* Add organization endpoint prefix */
-            if (scope) {
-              scope = '/api/v4/organizations/' + scope;
-            }
+            /* Add account endpoint prefix */
+            scope = '/api/v4/accounts/' + scope[1];
             /* Select either zone or cluster */
             if (query.from == 'vdns') {
-              if (!scope) {
-                scope = '/api/v4/user';
-              }
               return this._get(scope + '/virtual_dns/' + tag + endpoint, params);
-            }
-            if (!scope) {
-              scope = '/api/v4/zones';
             }
             return this._get(scope + '/' + tag + endpoint, params);
           }
