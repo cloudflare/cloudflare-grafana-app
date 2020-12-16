@@ -224,8 +224,12 @@ class CloudflareProxy {
     let params = this.formatQuery(query);
     let scope = query.tag.split('/', 2);
     let tag = scope[0];
-    /* Add account endpoint prefix */
-    scope = '/api/v4/accounts/' + scope[1];
+    /* Add endpoint prefix */
+    if (scope[1]) {
+      scope = '/api/v4/accounts/' + scope[1];
+    } else {
+      scope = '/api/v4/zones'
+    }
     /* Select either zone or cluster */
     if (query.from == 'vdns') {
       return this._get(scope + '/virtual_dns/' + tag + endpoint, params);
