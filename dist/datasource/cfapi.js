@@ -181,15 +181,27 @@ System.register(['./metric_def', 'angular', 'lodash', 'moment'], function (_expo
             });
           }
         }, {
-          key: 'fetchAccounts',
-          value: function fetchAccounts() {
+          key: 'fetchAuthEndpoint',
+          value: function fetchAuthEndpoint() {
             var _this3 = this;
 
             return this.fetchConfig().then(function () {
-              if (!_this3.config.accounts) {
+              if (_this3.config.bearerSet) {
+                return "/with-token";
+              }
+              return "/with-key";
+            });
+          }
+        }, {
+          key: 'fetchAccounts',
+          value: function fetchAccounts() {
+            var _this4 = this;
+
+            return this.fetchConfig().then(function () {
+              if (!_this4.config.accounts) {
                 return [];
               }
-              return _this3.config.accounts;
+              return _this4.config.accounts;
             });
           }
         }, {
@@ -216,13 +228,13 @@ System.register(['./metric_def', 'angular', 'lodash', 'moment'], function (_expo
         }, {
           key: 'fetchClusters',
           value: function fetchClusters() {
-            var _this4 = this;
+            var _this5 = this;
 
             return this.fetchConfig().then(function () {
-              if (!_this4.config.clusters) {
+              if (!_this5.config.clusters) {
                 return [];
               }
-              return _this4.config.clusters.map(function (e) {
+              return _this5.config.clusters.map(function (e) {
                 /* Glue account ID to cluster ID so that metric fetching code knows
                  * which account ID to use in API queries. */
                 var id = e.id + '/' + e.account;
@@ -289,11 +301,15 @@ System.register(['./metric_def', 'angular', 'lodash', 'moment'], function (_expo
         }, {
           key: '_get',
           value: function _get(url, data) {
+            var _this6 = this;
+
             console.log();
-            return this.backendSrv.datasourceRequest({
-              method: 'GET',
-              url: this.baseUrl + url,
-              params: data
+            return this.fetchAuthEndpoint().then(function (endpoint) {
+              return _this6.backendSrv.datasourceRequest({
+                method: 'GET',
+                url: _this6.baseUrl + endpoint + url,
+                params: data
+              });
             });
           }
         }]);

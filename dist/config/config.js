@@ -42,7 +42,6 @@ System.register(['./config.html!text', 'lodash'], function (_export, _context) {
 
           _classCallCheck(this, CloudflareConfigCtrl);
 
-          this.baseUrl = 'api/plugin-proxy/cloudflare-app/api/v4';
           this.backendSrv = backendSrv;
 
           this.appEditCtrl.setPreUpdateHook(this.preUpdate.bind(this));
@@ -55,10 +54,20 @@ System.register(['./config.html!text', 'lodash'], function (_export, _context) {
             this.appModel.secureJsonData = {};
           }
 
+          this.baseUrl = 'api/plugin-proxy/cloudflare-app';
+          if (this.appModel.jsonData.bearerSet) {
+            this.baseUrl += '/with-token';
+          } else {
+            this.baseUrl += '/with-key';
+          }
+          this.baseUrl += '/api/v4';
+
           this.apiValidated = false;
           this.apiError = false;
 
-          if (this.appModel.enabled && this.appModel.jsonData.tokenSet) {
+          var hasSecret = this.appModel.jsonData.bearerSet || this.appModel.jsonData.tokenSet;
+
+          if (this.appModel.enabled && hasSecret) {
             this.validateApiConnection().then(function (is_updated) {
               if (is_updated) {
                 _this.appEditCtrl.update();
@@ -70,6 +79,10 @@ System.register(['./config.html!text', 'lodash'], function (_export, _context) {
         _createClass(CloudflareConfigCtrl, [{
           key: 'preUpdate',
           value: function preUpdate() {
+            if (this.appModel.secureJsonData.bearer) {
+              this.appModel.jsonData.bearerSet = true;
+            }
+
             if (this.appModel.secureJsonData.token) {
               this.appModel.jsonData.tokenSet = true;
             }
@@ -110,7 +123,8 @@ System.register(['./config.html!text', 'lodash'], function (_export, _context) {
               });
               self.appModel.jsonData.accounts = accounts;
               return Promise.all(promises).then(function () {
-                var previous = self.appModel.jsonData.clusters.map(function (x) {
+                var previous = self.appModel.jsonData.clusters || [];
+                previous = previous.map(function (x) {
                   return x.id;
                 }).sort();
                 var next = clusters.map(function (x) {
@@ -133,6 +147,7 @@ System.register(['./config.html!text', 'lodash'], function (_export, _context) {
             this.appModel.jsonData.clusters = [];
             this.appModel.jsonData.accounts = [];
             this.appModel.jsonData.email = '';
+            this.appModel.jsonData.bearerSet = false;
             this.appModel.jsonData.tokenSet = false;
             this.appModel.secureJsonData = {};
             this.apiValidated = false;

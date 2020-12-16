@@ -4,7 +4,6 @@ import _ from 'lodash' ;
 
 class CloudflareConfigCtrl {
   constructor($scope, $injector, backendSrv) {
-    this.baseUrl = 'api/plugin-proxy/cloudflare-app/api/v4';
     this.backendSrv = backendSrv;
 
     this.appEditCtrl.setPreUpdateHook(this.preUpdate.bind(this));
@@ -17,10 +16,20 @@ class CloudflareConfigCtrl {
       this.appModel.secureJsonData = {};
     }
 
+    this.baseUrl = 'api/plugin-proxy/cloudflare-app';
+    if (this.appModel.jsonData.bearerSet) {
+      this.baseUrl += '/with-token';
+    } else {
+      this.baseUrl += '/with-key';
+    }
+    this.baseUrl += '/api/v4';
+
     this.apiValidated = false;
     this.apiError = false;
 
-    if (this.appModel.enabled && this.appModel.jsonData.tokenSet) {
+    var hasSecret = this.appModel.jsonData.bearerSet || this.appModel.jsonData.tokenSet;
+
+    if (this.appModel.enabled && hasSecret) {
       this.validateApiConnection().then((is_updated) => {
         if (is_updated) {
           this.appEditCtrl.update();
@@ -30,7 +39,11 @@ class CloudflareConfigCtrl {
   }
 
   preUpdate() {
-    if (this.appModel.secureJsonData.token)  {
+    if (this.appModel.secureJsonData.bearer) {
+      this.appModel.jsonData.bearerSet = true;
+    }
+
+    if (this.appModel.secureJsonData.token) {
       this.appModel.jsonData.tokenSet = true;
     }
 
@@ -70,7 +83,8 @@ class CloudflareConfigCtrl {
       });
       self.appModel.jsonData.accounts = accounts;
       return Promise.all(promises).then(() => {
-        var previous = self.appModel.jsonData.clusters.map(x => { return x.id }).sort();
+        var previous = self.appModel.jsonData.clusters || [];
+        previous = previous.map(x => { return x.id }).sort();
         var next = clusters.map(x => { return x.id }).sort();
         is_updated = !_.isEqual(previous, next);
         self.appModel.jsonData.clusters = clusters;
@@ -88,6 +102,7 @@ class CloudflareConfigCtrl {
     this.appModel.jsonData.clusters = [];
     this.appModel.jsonData.accounts = [];
     this.appModel.jsonData.email = '';
+    this.appModel.jsonData.bearerSet = false;
     this.appModel.jsonData.tokenSet = false;
     this.appModel.secureJsonData = {};
     this.apiValidated = false;

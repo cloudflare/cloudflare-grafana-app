@@ -3,17 +3,56 @@
 	<div class="gf-form" ng-if="ctrl.apiError && ctrl.appModel.enabled">
 		<span>Invalid API credentials. This app won&rsquo;t work until the credentials are updated.</span>
 	</div>
+	<div class="grafana-info-box">
+		<h4>Authentication Methods</h4>
+		<p>
+			We highly recommend that you generate an
+			<a href="https://developers.cloudflare.com/api/tokens">API token</a>
+			for this app. Please make sure the token has the following
+			permissions:
+		</p>
+		<ul>
+			<li>Account / Account Settings / Read
+			<li>Account / DNS Firewall / Read
+			<li>Zone / Zone / Read
+			<li>Zone / Analytics / Read
+		</ul>
+
+		<p class="m-t-1">
+			Alternatively, you may authenticate with your email address and
+			<a href="https://developers.cloudflare.com/api/keys">legacy API key</a>.
+		</p>
+	</div>
+	<p class="m-t-1">Please enter your API token below.</p>
+	<div class="gf-form-inline">
+		<div class="gf-form cf-inline-field-margin--right">
+			<label class="gf-form-label width-10">API Token</label>
+			<!-- Hidden input to stop chrome from autofilling -->
+			<input style="display:none;" type="password" name="fakename0" />
+			<input type="password" class="gf-form-input max-width-20" ng-model="ctrl.appModel.secureJsonData.bearer" ng-if="!ctrl.appModel.jsonData.bearerSet"/>
+			<div ng-if="ctrl.appModel.jsonData.bearerSet" class="gf-form">
+				<input type="text" class="gf-form-input max-width-20" disabled="disabled" value="saved" />
+				<div ng-if="ctrl.appModel.enabled">
+					<i class="fa fa-exclamation-triangle" ng-if="!ctrl.apiValidated" alt="Could not validate API token."></i>
+				</div>
+			</div>
+		</div>
+		<div class="gf-form">
+			<a class="btn btn-danger btn-small" href="#" ng-click="ctrl.reset()" ng-if="ctrl.appModel.jsonData.bearerSet">reset</a>
+		</div>
+	</div>
+	<p class="m-t-1">Alternatively, enter your email address and API key.</p>
 	<div class="gf-form">
-		<label class="gf-form-label width-10">Email</label>
+		<label class="gf-form-label width-10">Email address</label>
 		<!-- Hidden input to stop chrome from autofilling -->
-		<input style="display:none;" type="text" name="somefakename" />
-		<input type="text" class="gf-form-input max-width-20" ng-model='ctrl.appModel.jsonData.email' placeholder="email"></input>
+		<input style="display:none;" type="text" name="fakename1" />
+		<input type="text" class="gf-form-input max-width-20" ng-model='ctrl.appModel.jsonData.email'></input>
 	</div>
 	<div class="gf-form-inline">
 		<div class="gf-form cf-inline-field-margin--right">
 			<label class="gf-form-label width-10">API Key</label>
 			<!-- Hidden input to stop chrome from autofilling -->
-			<input style="display:none;" type="password" name="anotherfakename" />
+			<input style="display:none;" type="password" name="fakename2" />
 			<input type="password" class="gf-form-input max-width-20" ng-model="ctrl.appModel.secureJsonData.token" ng-if="!ctrl.appModel.jsonData.tokenSet"/>
 			<div ng-if="ctrl.appModel.jsonData.tokenSet" class="gf-form">
 				<input type="text" class="gf-form-input max-width-20" disabled="disabled" value="saved" />
@@ -26,6 +65,10 @@
 			<a class="btn btn-danger btn-small" href="#" ng-click="ctrl.reset()" ng-if="ctrl.appModel.jsonData.tokenSet">reset</a>
 		</div>
 	</div>
+	<p class="m-t-1">
+		If the credentials are correct and the token has sufficient
+		permissions, the accounts you have access to will be listed below.
+	</p>
 	<div class="gf-form-inline">
 		<div class="gf-form">
 			<label class="gf-form-label width-10">Accounts</label>
@@ -39,7 +82,7 @@
 	</div>
 </div>
 
-<div ng-if="ctrl.appModel.jsonData.tokenSet" class="cf-enabled-box">
+<div ng-if="ctrl.appModel.jsonData.bearerSet || ctrl.appModel.jsonData.tokenSet" class="cf-enabled-box">
 	<i class="icon-gf icon-gf-check icon-gf-check cf-icon-success"></i>
 	<strong>Successfully enabled.</strong>
 </div>

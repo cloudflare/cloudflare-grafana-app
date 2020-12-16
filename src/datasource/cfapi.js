@@ -140,6 +140,15 @@ class CloudflareProxy {
     });
   }
 
+  fetchAuthEndpoint() {
+    return this.fetchConfig().then(() => {
+      if (this.config.bearerSet) {
+        return "/with-token";
+      }
+      return "/with-key";
+    });
+  }
+
   fetchAccounts() {
     return this.fetchConfig().then(() => {
       if (!this.config.accounts) {
@@ -239,10 +248,12 @@ class CloudflareProxy {
 
   _get(url, data) {
     console.log()
-    return this.backendSrv.datasourceRequest({
-      method: 'GET',
-      url: this.baseUrl + url,
-      params: data
+    return this.fetchAuthEndpoint().then((endpoint) => {
+      return this.backendSrv.datasourceRequest({
+        method: 'GET',
+        url: this.baseUrl + endpoint + url,
+        params: data
+      });
     });
   }
 }

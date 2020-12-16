@@ -7,7 +7,15 @@
 
   "routes": [
     {
-      "path": "api/v4/*",
+      "path": "with-token/api/v4/*",
+      "method": "GET",
+      "url": "https://api.cloudflare.com/client/v4",
+      "headers": [
+        {"name": "Authorization", "content": "Bearer {{.SecureJsonData.bearer}}"}
+      ]
+    },
+    {
+      "path": "with-key/api/v4/*",
       "method": "GET",
       "url": "https://api.cloudflare.com/client/v4",
       "headers": [
