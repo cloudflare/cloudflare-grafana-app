@@ -3,8 +3,6 @@
   "name": "Cloudflare Grafana App",
   "id": "cloudflare-app",
 
-  "staticRoot": ".",
-
   "routes": [
     {
       "path": "with-token/api/v4/*",
