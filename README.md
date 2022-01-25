@@ -29,6 +29,8 @@ Give your team a quick view into DNS traffic. This app provides instant
 visibility into query rates and latencies, and Cloudflare's high frequency
 monitoring service.
 
+This app supports regular DNS zones as well as DNS Firewall clusters.
+
 ### Supported metrics
 
 - Queries per second, broken down by dimensions and filters
