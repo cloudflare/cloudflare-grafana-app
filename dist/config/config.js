@@ -114,7 +114,7 @@ System.register(['./config.html!text', 'lodash'], function (_export, _context) {
               accountList.forEach(function (e) {
                 accounts.push({ name: e.name, id: e.id });
                 /* Update list of clusters */
-                promises.push(self.backendSrv.get(self.baseUrl + '/accounts/' + e.id + '/virtual_dns').then(function (resp) {
+                promises.push(self.backendSrv.get(self.baseUrl + '/accounts/' + e.id + '/dns_firewall').then(function (resp) {
                   resp.result.forEach(function (c) {
                     c.account = e.id;
                     clusters.push({ id: c.id, account: c.account, name: c.name });
