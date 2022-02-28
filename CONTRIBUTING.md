@@ -11,10 +11,12 @@ make get-deps
 # Build the plugin
 make build
 # Copy the plugin to your Grafana plugins directory
-cp -R dist/* /var/lib/grafana/plugins/cloudflare
+sudo rsync --recursive --delete dist/ /var/lib/grafana/plugins/cloudflare-app
 ```
 
-Note: modern versions of Grafana do not load unsigned plugins by default.
+Note: modern versions of Grafana do not load unsigned plugins by default. Be
+sure to set `app_mode = development` in Grafana's configuration file (usually
+`/etc/grafana/grafana.ini`) to allow the plugin to load.
 
 ## Running Locally via Docker
 
