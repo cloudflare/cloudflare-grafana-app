@@ -40,7 +40,7 @@
     ],
     "screenshots": [
       {"name": "Dashboard: Zones", "path": "img/cf_dashboard_zones.png"},
-      {"name": "Dashboard: DNS Firewall", "path": "img/cf_dashboard_virtualdns.png"}
+      {"name": "Dashboard: DNS Firewall", "path": "img/cf_dashboard_dns_firewall.png"}
     ],
     "version": "0.2.2",
     "updated": "2021-08-31"
@@ -57,7 +57,7 @@
     {
       "type": "dashboard",
       "name": "DNS Firewall",
-      "path": "dashboards/virtual-dns.json",
+      "path": "dashboards/dns-firewall.json",
       "addToNav": true
     },
     {

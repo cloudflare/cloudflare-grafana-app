@@ -74,7 +74,7 @@ class CloudflareConfigCtrl {
         accounts.push({name: e.name, id: e.id});
         /* Update list of clusters */
         promises.push(self.backendSrv.get(
-          self.baseUrl + '/accounts/' + e.id + '/virtual_dns').then(resp => {
+          self.baseUrl + '/accounts/' + e.id + '/dns_firewall').then(resp => {
             resp.result.forEach(c => {
               c.account = e.id;
               clusters.push({id: c.id, account: c.account, name: c.name});

@@ -158,7 +158,7 @@ System.register(['./metric_def', 'angular', 'lodash', 'moment'], function (_expo
             }
             var path = 'zones';
             if (query.from == 'vdns') {
-              path = 'accounts/' + scope + '/virtual_dns';
+              path = 'accounts/' + scope + '/dns_firewall';
             }
             /* Resolve the tag name to ID */
             return this._get('/api/v4/' + path, { name: tag }).then(function (resp) {
@@ -294,7 +294,7 @@ System.register(['./metric_def', 'angular', 'lodash', 'moment'], function (_expo
             }
             /* Select either zone or cluster */
             if (query.from == 'vdns') {
-              return this._get(scope + '/virtual_dns/' + tag + endpoint, params);
+              return this._get(scope + '/dns_firewall/' + tag + endpoint, params);
             }
             return this._get(scope + '/' + tag + endpoint, params);
           }
