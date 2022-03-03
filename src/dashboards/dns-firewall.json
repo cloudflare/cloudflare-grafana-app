@@ -51,7 +51,7 @@
           "scopedVars": {
             "cluster": {
               "selected": true,
-              "text": "cf_vdns_test",
+              "text": "cf_dnsfw_test",
               "value": "8ac38012fa7817bb31e7cd94458110b4/a67e14daa5f8dceeb91fe5449ba496eb"
             }
           },
@@ -63,7 +63,7 @@
             {
               "dimensions": "",
               "filters": [],
-              "from": "vdns",
+              "from": "dnsfw",
               "metrics": [
                 "queryCount",
                 "uncachedCount",
@@ -145,7 +145,7 @@
           "scopedVars": {
             "cluster": {
               "selected": true,
-              "text": "cf_vdns_test",
+              "text": "cf_dnsfw_test",
               "value": "8ac38012fa7817bb31e7cd94458110b4/a67e14daa5f8dceeb91fe5449ba496eb"
             }
           },
@@ -163,7 +163,7 @@
                   "value": "uncached"
                 }
               ],
-              "from": "vdns",
+              "from": "dnsfw",
               "metrics": [
                 "responseTimeMedian",
                 "responseTime90th",
@@ -245,7 +245,7 @@
           "scopedVars": {
             "cluster": {
               "selected": true,
-              "text": "cf_vdns_test",
+              "text": "cf_dnsfw_test",
               "value": "8ac38012fa7817bb31e7cd94458110b4/a67e14daa5f8dceeb91fe5449ba496eb"
             }
           },
@@ -257,7 +257,7 @@
             {
               "dimensions": "responseCode",
               "filters": [],
-              "from": "vdns",
+              "from": "dnsfw",
               "metrics": [
                 "queryCount"
               ],
@@ -332,7 +332,7 @@
           "scopedVars": {
             "cluster": {
               "selected": true,
-              "text": "cf_vdns_test",
+              "text": "cf_dnsfw_test",
               "value": "8ac38012fa7817bb31e7cd94458110b4/a67e14daa5f8dceeb91fe5449ba496eb"
             }
           },
@@ -351,7 +351,7 @@
                   "value": "uncached"
                 }
               ],
-              "from": "vdns",
+              "from": "dnsfw",
               "metrics": [
                 "queryCount"
               ],
@@ -429,7 +429,7 @@
           "scopedVars": {
             "cluster": {
               "selected": true,
-              "text": "cf_vdns_test",
+              "text": "cf_dnsfw_test",
               "value": "8ac38012fa7817bb31e7cd94458110b4/a67e14daa5f8dceeb91fe5449ba496eb"
             }
           },
@@ -447,7 +447,7 @@
                   "value": "uncached"
                 }
               ],
-              "from": "vdns",
+              "from": "dnsfw",
               "metrics": [
                 "responseTimeMedian"
               ],
@@ -508,7 +508,7 @@
           "scopedVars": {
             "cluster": {
               "selected": true,
-              "text": "cf_vdns_test",
+              "text": "cf_dnsfw_test",
               "value": "8ac38012fa7817bb31e7cd94458110b4/a67e14daa5f8dceeb91fe5449ba496eb"
             }
           },
@@ -544,7 +544,7 @@
               "currentMetricKey": "",
               "dimensions": "queryName",
               "filters": [],
-              "from": "vdns",
+              "from": "dnsfw",
               "metrics": [
                 "uncachedCount"
               ],
@@ -572,7 +572,7 @@
           "scopedVars": {
             "cluster": {
               "selected": true,
-              "text": "cf_vdns_test",
+              "text": "cf_dnsfw_test",
               "value": "8ac38012fa7817bb31e7cd94458110b4/a67e14daa5f8dceeb91fe5449ba496eb"
             }
           },
@@ -614,7 +614,7 @@
                   "value": "SERVFAIL"
                 }
               ],
-              "from": "vdns",
+              "from": "dnsfw",
               "metrics": [],
               "refId": "A",
               "tag": "$cluster"

@@ -74,7 +74,7 @@ System.register(['app/plugins/sdk', './metric_def'], function (_export, _context
           _this.dimensions = dimensionList.slice();
           _this.dimensions.push({ text: '', value: '' });
           _this.metrics = metricList;
-          _this.queryModes = [{ value: 'zone', text: 'Zone' }, { value: 'vdns', text: 'DNS Firewall' }];
+          _this.queryModes = [{ value: 'zone', text: 'Zone' }, { value: 'dnsfw', text: 'DNS Firewall' }];
 
           _this.target.from = _this.target.from || 'zone';
           if (!_this.target.metrics) {

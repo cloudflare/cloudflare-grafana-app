@@ -116,7 +116,7 @@ class CloudflareProxy {
       return Promise.resolve(cached);
     }
     let path = 'zones';
-    if (query.from == 'vdns') {
+    if (query.from == 'dnsfw') {
       path = 'accounts/' + scope + '/dns_firewall'
     }
     /* Resolve the tag name to ID */
@@ -240,7 +240,7 @@ class CloudflareProxy {
       scope = '/api/v4/zones'
     }
     /* Select either zone or cluster */
-    if (query.from == 'vdns') {
+    if (query.from == 'dnsfw') {
       return this._get(scope + '/dns_firewall/' + tag + endpoint, params);
     }
     return this._get(scope + '/' + tag + endpoint, params);

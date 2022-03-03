@@ -12,7 +12,7 @@ class CloudflareQueryCtrl extends QueryCtrl {
     this.metrics = metricList;
     this.queryModes = [
       {value: 'zone', text: 'Zone'},
-      {value: 'vdns', text: 'DNS Firewall'}
+      {value: 'dnsfw', text: 'DNS Firewall'}
     ];
     
 
