@@ -16,7 +16,7 @@ then
 	exit 1
 fi
 
-PATH="$PATH:node_modules/.bin" make
+PATH="$PWD/node_modules/.bin:$PATH" make
 
 npx @grafana/toolkit plugin:sign
 
