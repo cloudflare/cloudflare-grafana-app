@@ -170,7 +170,10 @@ class CloudflareDatasource {
     if (query === 'accounts()') {
       return this.api.fetchAccounts();
     }
-    return this.api.fetchZones();
+    if (query === 'zones()') {
+      return this.api.fetchZones();
+    }
+    return Promise.resolve(null);
   }
 
   getTagKeys() {
