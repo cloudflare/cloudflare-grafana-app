@@ -12,7 +12,8 @@ fi
 
 if [ -z ${GRAFANA_API_KEY+x} ]
 then
-	echo >&2 'GRAFANA_API_KEY must be set.'
+	printf >&2 'GRAFANA_API_KEY must be set.\n'
+	exit 1
 fi
 
 PATH="$PATH:node_modules/.bin" make
