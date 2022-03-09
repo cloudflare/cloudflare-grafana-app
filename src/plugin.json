@@ -51,6 +51,7 @@
       "type": "dashboard",
       "name": "Zones",
       "path": "dashboards/zones.json",
+      "uid": "KAVdMAw9k",
       "addToNav": true,
       "defaultNav": true
     },
@@ -58,6 +59,7 @@
       "type": "dashboard",
       "name": "DNS Firewall",
       "path": "dashboards/dns-firewall.json",
+      "uid": "QrKttDVqu",
       "addToNav": true
     },
     {
