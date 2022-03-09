@@ -218,7 +218,10 @@ System.register(['./metric_def', 'lodash', 'app/core/table_model', './cfapi'], f
             if (query === 'accounts()') {
               return this.api.fetchAccounts();
             }
-            return this.api.fetchZones();
+            if (query === 'zones()') {
+              return this.api.fetchZones();
+            }
+            return Promise.resolve(null);
           }
         }, {
           key: 'getTagKeys',
