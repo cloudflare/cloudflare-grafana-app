@@ -21,7 +21,8 @@ There are no other external dependencies, accounts or configurations needed.
 [Cloudflare Grafana App](https://grafana.com/grafana/plugins/cloudflare-app/)
 can be installed from grafana.com.
 
-For other methods, please see [CONTRIBUTING.md](./CONTRIBUTING.md).
+For other methods, please see
+[CONTRIBUTING.md](https://github.com/cloudflare/cloudflare-grafana-app/blob/main/CONTRIBUTING.md).
 
 ## Features
 
