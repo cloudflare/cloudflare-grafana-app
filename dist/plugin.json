@@ -53,7 +53,7 @@
       "path": "dashboards/zones.json",
       "uid": "KAVdMAw9k",
       "addToNav": true,
-      "defaultNav": false
+      "defaultNav": true
     },
     {
       "type": "dashboard",
