@@ -10,10 +10,22 @@ traffic from Cloudflare's edge.
 Monitor and explore DNS traffic by geography, latency, response code, query
 type, and hostname.
 
+## Deprecation Notice
+
+**This app is deprecated.**
+
+This app is deprecated and will no longer be updated after December 31, 2023.
+Please consider using the [Cloudflare Dashboard][dashboard] or [DNS Analytics
+API][api] instead.
+
+[dashboard]: https://dash.cloudflare.com/?to=/:account/:zone/analytics/dns
+[api]: https://developers.cloudflare.com/api/operations/dns-analytics-table
+
 ## Requirements
 
-The Cloudflare App requires [Grafana 3.0](https://grafana.org) (or higher) and
-a [Cloudflare account](https://www.cloudflare.com).
+The Cloudflare App requires [Grafana](https://grafana.org) version 3.0 to 9.x
+and a [Cloudflare account](https://www.cloudflare.com). Grafana 10 or later
+versions are not supported.
 There are no other external dependencies, accounts or configurations needed.
 
 ## Installation
@@ -43,14 +55,6 @@ This app supports regular DNS zones as well as DNS Firewall clusters.
 
 - [Cloudflare API](https://api.cloudflare.com)
 - [Cloudflare Knowledge Base](https://support.cloudflare.com/hc)
-
-### Feedback and Questions
-
-We would love to hear what you think of this app and if you have any feature
-requests for future versions.
-Please submit any issues with the app on
-[GitHub](https://github.com/cloudflare/cloudflare-grafana-app/issues) or
-[contact us directly](https://dash.cloudflare.com/redirect?account=support).
 
 ## License
 
