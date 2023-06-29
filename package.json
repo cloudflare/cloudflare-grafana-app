@@ -1,7 +1,7 @@
 {
   "name": "cloudflare-app",
   "private": true,
-  "version": "0.2.4",
+  "version": "0.2.5",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -38,7 +38,7 @@
     "grunt-jscs": "^2.8.0",
     "jshint-stylish": "~2.1.0",
     "lodash": "~4.17.21",
-    "yarn": "^1.22.17"
+    "yarn": "^1.22.19"
   },
   "homepage": "https://github.com/cloudflare/cloudflare-grafana-app#readme"
 }
